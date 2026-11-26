@@ -1,0 +1,25 @@
+{
+  "name": "dovero-group-website",
+  "version": "1.0.0",
+  "description": "DOVERO GROUP — yacht services website (Astro, static)",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "node scripts/check-links.mjs"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@fontsource-variable/jost": "^5.3.0",
+    "@fontsource/eb-garamond": "^5.3.0",
+    "@fontsource/mrs-saint-delafield": "^5.3.0",
+    "astro": "^7.4.13",
+    "sharp": "^0.35.5"
+  },
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  }
+}

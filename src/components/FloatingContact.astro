@@ -1,0 +1,194 @@
+---
+import Icon from './Icon.astro';
+import { CONTACT, LINKS } from '@/config/site';
+import { t } from '@/i18n/ui';
+import type { Locale } from '@/i18n/routes';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const s = t(lang);
+---
+
+<div class="fab" data-fab>
+  <div class="fab-panel" id="fab-panel" role="dialog" aria-modal="false" aria-labelledby="fab-title" data-fab-panel hidden>
+    <p class="fab-title" id="fab-title">{s.floating.title}</p>
+    <p class="fab-text">{s.floating.text}</p>
+    <ul role="list" class="fab-list">
+      <li>
+        <a href={LINKS.whatsapp} target="_blank" rel="noopener" data-track="whatsapp_click" data-track-label="floating">
+          <span class="fab-ic"><Icon name="whatsapp" size={18} /></span>
+          <span>WhatsApp</span>
+          <Icon name="arrow" size={9} />
+        </a>
+      </li>
+      <li>
+        <a href={LINKS.viber} data-track="viber_click" data-track-label="floating">
+          <span class="fab-ic"><Icon name="viber" size={18} /></span>
+          <span>Viber</span>
+          <Icon name="arrow" size={9} />
+        </a>
+      </li>
+      <li>
+        <a href={LINKS.tel} data-track="phone_click" data-track-label="floating">
+          <span class="fab-ic"><Icon name="phone" size={18} /></span>
+          <span>{s.floating.callNow}<small>{CONTACT.phoneDisplay}</small></span>
+          <Icon name="arrow" size={9} />
+        </a>
+      </li>
+    </ul>
+  </div>
+  <button type="button" class="fab-button" aria-expanded="false" aria-controls="fab-panel" data-fab-toggle>
+    <span class="visually-hidden">{s.floating.open}</span>
+    <span class="fab-icon fab-icon--open"><Icon name="chat" size={24} /></span>
+    <span class="fab-icon fab-icon--close"><Icon name="close" size={20} /></span>
+  </button>
+</div>
+
+<style>
+  .fab {
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+  }
+  .fab-button {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 3.6rem;
+    height: 3.6rem;
+    border-radius: 50%;
+    background: var(--navy-dark);
+    color: var(--gold);
+    border: 1px solid rgba(212, 178, 118, 0.55);
+    box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.55);
+    transition:
+      transform 0.4s var(--ease-out),
+      background-color 0.3s var(--ease);
+  }
+  .fab-button:hover {
+    transform: translateY(-2px);
+    background: var(--navy);
+  }
+  .fab-icon {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    transition:
+      opacity 0.3s var(--ease),
+      transform 0.4s var(--ease-out);
+  }
+  .fab-icon--close {
+    opacity: 0;
+    transform: rotate(-45deg);
+  }
+  .fab-button[aria-expanded='true'] .fab-icon--open {
+    opacity: 0;
+    transform: rotate(45deg);
+  }
+  .fab-button[aria-expanded='true'] .fab-icon--close {
+    opacity: 1;
+    transform: none;
+  }
+  .fab-panel {
+    width: min(19rem, calc(100vw - 2rem));
+    padding: 1.4rem 1.4rem 0.6rem;
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--line-light);
+    box-shadow: 0 30px 60px -25px rgba(4, 9, 16, 0.5);
+    transform-origin: bottom right;
+    animation: fab-in 0.4s var(--ease-out);
+  }
+  @keyframes fab-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.97);
+    }
+  }
+  .fab-title {
+    font-family: var(--font-serif);
+    font-size: 1.45rem;
+    line-height: 1.15;
+  }
+  .fab-text {
+    margin-top: 0.35rem;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+  .fab-list {
+    margin: 0.9rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .fab-list li + li {
+    border-top: 1px solid var(--line-light);
+  }
+  .fab-list a {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.85rem 0;
+    font-size: 0.9rem;
+    font-weight: 450;
+  }
+  .fab-list small {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 380;
+    color: var(--ink-soft);
+  }
+  .fab-ic {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: var(--navy-dark);
+    color: var(--gold);
+  }
+  .fab-list a :global(.icon-arrow) {
+    color: var(--bronze);
+    transition: transform 0.3s var(--ease);
+  }
+  .fab-list a:hover :global(.icon-arrow) {
+    transform: translateX(3px);
+  }
+  :global(html.menu-open) .fab {
+    display: none;
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-fab]');
+  const btn = root?.querySelector<HTMLButtonElement>('[data-fab-toggle]');
+  const panel = root?.querySelector<HTMLElement>('[data-fab-panel]');
+  if (root && btn && panel) {
+    const set = (open: boolean) => {
+      panel.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+      if (open) panel.querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
+    };
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      set(open);
+      if (open) window.dispatchEvent(new CustomEvent('dovero:track', { detail: { event: 'contact_panel_open' } }));
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panel.hidden) {
+        set(false);
+        btn.focus();
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (!panel.hidden && !root.contains(e.target as Node)) set(false);
+    });
+  }
+</script>

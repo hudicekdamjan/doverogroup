@@ -1,0 +1,82 @@
+---
+import { SITE, ANALYTICS, GOOGLE_SITE_VERIFICATION, ALLOW_INDEXING } from '@/config/site';
+import { LOCALES, LOCALE_META, url, type Locale, type RouteKey } from '@/i18n/routes';
+
+export interface SeoProps {
+  title: string;
+  description: string;
+  lang: Locale;
+  /** Page key for canonical + hreflang. Omit for pages without translations (404). */
+  route?: RouteKey;
+  ogImage?: { src: string; width: number; height: number; alt: string };
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>[];
+  ogType?: 'website' | 'article';
+}
+
+const { title, description, lang, route, ogImage, noindex = false, jsonLd = [], ogType = 'website' } = Astro.props as SeoProps;
+const site = Astro.site?.toString() ?? SITE.url;
+const abs = (p: string) => new URL(p, site).toString();
+
+const canonical = route ? abs(url(route, lang)) : undefined;
+const alternates = route ? LOCALES.map((l) => ({ hreflang: LOCALE_META[l].hreflang, href: abs(url(route, l)) })) : [];
+const xDefault = route ? abs(url(route, SITE.defaultLocale)) : undefined;
+const robots = !ALLOW_INDEXING || noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
+const meta = LOCALE_META[lang];
+const otherLocales = LOCALES.filter((l) => l !== lang);
+const ogImageAbs = ogImage ? abs(ogImage.src) : abs('/og/dovero-group.jpg');
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="robots" content={robots} />
+{canonical && <link rel="canonical" href={canonical} />}
+{alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+{xDefault && <link rel="alternate" hreflang="x-default" href={xDefault} />}
+
+<meta property="og:type" content={ogType} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+{canonical && <meta property="og:url" content={canonical} />}
+<meta property="og:locale" content={meta.ogLocale} />
+{otherLocales.map((l) => <meta property="og:locale:alternate" content={LOCALE_META[l].ogLocale} />)}
+<meta property="og:image" content={ogImageAbs} />
+<meta property="og:image:width" content={String(ogImage?.width ?? 1200)} />
+<meta property="og:image:height" content={String(ogImage?.height ?? 630)} />
+<meta property="og:image:alt" content={ogImage?.alt ?? SITE.name} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageAbs} />
+
+{GOOGLE_SITE_VERIFICATION && <meta name="google-site-verification" content={GOOGLE_SITE_VERIFICATION} />}
+
+{jsonLd.length > 0 && (
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd.length === 1 ? jsonLd[0] : { '@context': 'https://schema.org', '@graph': jsonLd.map(({ ['@context']: _c, ...rest }) => rest) })} />
+)}
+
+{ANALYTICS.GTM_ID && (
+  <script is:inline define:vars={{ id: ANALYTICS.GTM_ID }}>
+    (function (w, d, s, l, i) {
+      w[l] = w[l] || [];
+      w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+      var f = d.getElementsByTagName(s)[0], j = d.createElement(s);
+      j.async = true;
+      j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i;
+      f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', id);
+  </script>
+)}
+{!ANALYTICS.GTM_ID && ANALYTICS.GA4_ID && (
+  <>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${ANALYTICS.GA4_ID}`}></script>
+    <script is:inline define:vars={{ id: ANALYTICS.GA4_ID }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', id, { anonymize_ip: true });
+    </script>
+  </>
+)}

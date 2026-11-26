@@ -1,0 +1,36 @@
+---
+/** Responsive client photo (AVIF/WebP, lazy by default) with localized alt text. */
+import { Picture } from 'astro:assets';
+import { PHOTOS, type PhotoKey } from '@/content/media';
+import type { Locale } from '@/i18n/routes';
+
+interface Props {
+  photo: PhotoKey;
+  lang: Locale;
+  sizes: string;
+  widths?: number[];
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  /** Override the stored focal point. */
+  focus?: string;
+  alt?: string;
+}
+const { photo, lang, sizes, widths = [480, 828, 1080, 1440], class: className, loading = 'lazy', focus, alt } = Astro.props;
+const p = PHOTOS[photo];
+const usable = widths.filter((w) => w <= p.src.width);
+if (!usable.length) usable.push(p.src.width);
+---
+
+<Picture
+  src={p.src}
+  alt={alt ?? p.alt[lang]}
+  widths={usable}
+  sizes={sizes}
+  formats={['avif', 'webp']}
+  fallbackFormat="jpg"
+  quality={70}
+  loading={loading}
+  decoding="async"
+  class={className}
+  style={`object-position: ${focus ?? p.focus ?? '50% 50%'}`}
+/>

@@ -1,0 +1,93 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  items: { q: string; a: string }[];
+}
+const { items } = Astro.props;
+---
+
+<div class="faq">
+  {
+    items.map((item, i) => (
+      <details class="faq-item" open={i === 0}>
+        <summary>
+          <h3 class="faq-q">{item.q}</h3>
+          <span class="faq-ic" aria-hidden="true">
+            <Icon name="plus" size={18} />
+          </span>
+        </summary>
+        <div class="faq-a">
+          <p>{item.a}</p>
+        </div>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  .faq {
+    border-top: 1px solid var(--line-light);
+  }
+  .faq-item {
+    border-bottom: 1px solid var(--line-light);
+  }
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1.6rem 0;
+    cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-q {
+    font-family: var(--font-serif);
+    font-size: clamp(1.3rem, 1.1rem + 0.6vw, 1.65rem);
+    font-weight: 500;
+    line-height: 1.25;
+  }
+  .faq-ic {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--line-light);
+    border-radius: 50%;
+    color: var(--gold);
+    transition:
+      transform 0.4s var(--ease-out),
+      background-color 0.3s var(--ease);
+  }
+  .faq-item[open] .faq-ic {
+    transform: rotate(45deg);
+    background: var(--navy-dark);
+    color: var(--gold);
+    border-color: var(--navy-dark);
+  }
+  .faq-a {
+    padding: 0 4rem 1.75rem 0;
+    max-width: 48rem;
+    color: var(--ink-soft);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .faq-item[open] .faq-a {
+      animation: faq-in 0.5s var(--ease-out);
+    }
+  }
+  @keyframes faq-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+  @media (max-width: 640px) {
+    .faq-a {
+      padding-right: 0;
+    }
+  }
+</style>

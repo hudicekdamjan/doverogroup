@@ -1,0 +1,257 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import InquiryForm from '@/components/InquiryForm.astro';
+import ContactOptions from '@/components/ContactOptions.astro';
+import Icon from '@/components/Icon.astro';
+import { PHOTOS } from '@/content/media';
+import { ogImage } from '@/lib/images';
+import { breadcrumbSchema, ORG_ID } from '@/lib/schema';
+import { type Locale } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+import { CONTACT, CONTACT_EMAIL, LINKS, SERVICE_AREAS, REGION } from '@/config/site';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const s = t(lang);
+
+const C = {
+  en: {
+    seoTitle: 'Contact DOVERO GROUP — Yacht Services Quote, Montenegro',
+    seoDesc:
+      'Request a quote from DOVERO GROUP for yacht detailing, repairs, maintenance, winter storage or charter in Montenegro. Call +382 69 273 857, WhatsApp or Viber.',
+    eyebrow: 'Contact',
+    h1: 'Request a quote',
+    lead: 'Tell us about your yacht and what it needs. The fastest way to reach us is WhatsApp — the form below prepares your message for you.',
+    direct: 'Direct contact',
+    phoneLabel: 'Phone · WhatsApp · Viber',
+    stepsLabel: 'How the form works',
+    steps: [
+      'Fill in the form with your details and request.',
+      'We prepare a WhatsApp message with all the information.',
+      'You review it and press send in WhatsApp.',
+      'We reply on the channel you prefer.',
+    ],
+    areas: 'Service area',
+    photosTitle: 'Have photos?',
+    photosText: 'After sending your inquiry, you can attach photos of the yacht or the damage directly in the WhatsApp chat. It helps us give you an accurate answer faster.',
+  },
+  me: {
+    seoTitle: 'Kontakt — zatražite ponudu za usluge jahti | DOVERO GROUP',
+    seoDesc:
+      'Zatražite ponudu za detailing, popravke, održavanje, zimski smještaj ili najam jahti u Crnoj Gori. Telefon, WhatsApp i Viber: +382 69 273 857.',
+    eyebrow: 'Kontakt',
+    h1: 'Zatražite ponudu',
+    lead: 'Opišite nam jahtu i šta joj je potrebno. Najbrže ćete nas dobiti putem WhatsApp-a — forma ispod priprema poruku umjesto vas.',
+    direct: 'Direktan kontakt',
+    phoneLabel: 'Telefon · WhatsApp · Viber',
+    stepsLabel: 'Kako forma funkcioniše',
+    steps: [
+      'Popunite formu svojim podacima i zahtjevom.',
+      'Pripremamo WhatsApp poruku sa svim informacijama.',
+      'Provjerite je i pritisnite „pošalji” u WhatsApp-u.',
+      'Odgovaramo putem kanala koji ste izabrali.',
+    ],
+    areas: 'Područje rada',
+    photosTitle: 'Imate fotografije?',
+    photosText: 'Nakon slanja upita, fotografije jahte ili oštećenja možete priložiti direktno u WhatsApp razgovoru. Tako vam brže možemo dati precizan odgovor.',
+  },
+}[lang];
+
+const crumbs = [
+  { name: s.nav.home, route: 'home' as const },
+  { name: s.nav.contact, route: 'contact' as const },
+];
+const og = await ogImage(PHOTOS.bow.src);
+---
+
+<BaseLayout
+  lang={lang}
+  route="contact"
+  title={C.seoTitle}
+  description={C.seoDesc}
+  ogImage={{ ...og, alt: PHOTOS.bow.alt[lang] }}
+  jsonLd={[breadcrumbSchema(crumbs, lang), { '@context': 'https://schema.org', '@type': 'ContactPage', name: C.seoTitle, about: { '@id': ORG_ID } }]}
+>
+  <PageHero lang={lang} photo="bow" eyebrow={C.eyebrow} title={C.h1} lead={C.lead} breadcrumbs={crumbs} compact>
+    <div class="hero-quick">
+      <a class="btn" href="#inquiry">{s.form.submit}<Icon name="arrow" size={10} /></a>
+      <a class="hero-phone" href={LINKS.tel} data-track="phone_click" data-track-label="contact_hero"><Icon name="phone" size={18} />{CONTACT.phoneDisplay}</a>
+    </div>
+  </PageHero>
+
+  <section class="section section--light contact">
+    <div class="container contact-grid">
+      <aside class="direct on-dark" aria-labelledby="direct-title">
+        <p class="label label--rule" id="direct-title">{C.direct}</p>
+        <p class="direct-name">DOVERO GROUP</p>
+        <p class="direct-plabel">{C.phoneLabel}</p>
+        <a class="direct-phone" href={LINKS.tel} data-track="phone_click" data-track-label="contact_direct">{CONTACT.phoneDisplay}</a>
+        {CONTACT_EMAIL && (
+          <a class="direct-email" href={LINKS.email} data-track="email_click" data-track-label="contact_direct">{CONTACT_EMAIL}</a>
+        )}
+        <ContactOptions lang={lang} placement="contact_direct" tone="dark" layout="stack" />
+
+        <div class="direct-block">
+          <p class="direct-h">{C.stepsLabel}</p>
+          <ol role="list" class="direct-steps">
+            {C.steps.map((st, i) => <li><span>{String(i + 1).padStart(2, '0')}</span>{st}</li>)}
+          </ol>
+        </div>
+
+        <div class="direct-block">
+          <p class="direct-h">{C.areas}</p>
+          <p class="direct-areas">{SERVICE_AREAS.map((a) => a.detail ? `${a.name} (${a.detail})` : a.name).join(' · ')}</p>
+          <p class="direct-region"><Icon name="pin" size={15} />{REGION[lang]}</p>
+        </div>
+      </aside>
+
+      <div class="form-col">
+        <InquiryForm lang={lang} />
+        <div class="photos-note">
+          <p class="pn-t">{C.photosTitle}</p>
+          <p class="pn-d">{C.photosText}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero-quick {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem 2rem;
+  }
+  .hero-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    color: var(--ivory);
+  }
+  .hero-phone :global(svg) {
+    color: var(--gold);
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 4.2fr) minmax(0, 7.8fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: start;
+  }
+  .direct {
+    position: sticky;
+    top: calc(var(--header-h) + 1.5rem);
+    padding: clamp(1.75rem, 3vw, 2.75rem);
+    background: var(--surface-3);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    color: var(--on-dark);
+  }
+  .direct .label {
+    color: var(--gold);
+  }
+  .direct-name {
+    margin-top: 1.75rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+  }
+  .direct-plabel {
+    margin-top: 1.25rem;
+    font-size: 0.75rem;
+    color: var(--on-dark-soft);
+  }
+  .direct-phone {
+    display: inline-block;
+    margin: 0.25rem 0 1.75rem;
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 1.5rem + 1.5vw, 2.6rem);
+    line-height: 1.1;
+    color: var(--ivory);
+    transition: color 0.3s var(--ease);
+  }
+  .direct-phone:hover {
+    color: var(--gold-soft);
+  }
+  .direct-email {
+    display: block;
+    margin: -1rem 0 1.75rem;
+    color: var(--gold-soft);
+  }
+  .direct-block {
+    margin-top: 2.25rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--line-dark);
+  }
+  .direct-h {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .direct-steps {
+    display: grid;
+    gap: 0.75rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    font-size: 0.92rem;
+    color: var(--on-dark-soft);
+  }
+  .direct-steps li {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+  }
+  .direct-steps span {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    padding-top: 0.2rem;
+  }
+  .direct-areas {
+    margin-top: 0.9rem;
+    font-size: 0.95rem;
+  }
+  .direct-region {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--on-dark-soft);
+  }
+  .direct-region :global(svg) {
+    color: var(--gold);
+  }
+  .form-col {
+    min-width: 0;
+  }
+  .photos-note {
+    margin-top: 3rem;
+    padding: 1.5rem 1.75rem;
+    background: var(--surface-2);
+  }
+  .pn-t {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+  }
+  .pn-d {
+    margin-top: 0.4rem;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+  @media (max-width: 1000px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+    .direct {
+      position: static;
+      order: 2;
+    }
+  }
+</style>

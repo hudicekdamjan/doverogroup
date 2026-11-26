@@ -1,0 +1,946 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Photo from '@/components/Photo.astro';
+import Icon from '@/components/Icon.astro';
+import FilmReel from '@/components/FilmReel.astro';
+import Gallery from '@/components/Gallery.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { PHOTOS } from '@/content/media';
+import { SERVICE_LIST } from '@/content/services';
+import { responsiveSet, ogImage } from '@/lib/images';
+import { organizationSchema, websiteSchema } from '@/lib/schema';
+import { url, type Locale } from '@/i18n/routes';
+import { t, type ServiceKey } from '@/i18n/ui';
+import { SERVICE_AREAS } from '@/config/site';
+import logoPng from '@/assets/brand/logo.png';
+import { getImage } from 'astro:assets';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const s = t(lang);
+
+const SERVICE_ICON: Record<ServiceKey, 'sparkle' | 'wrench' | 'gear' | 'storage' | 'helm'> = {
+  detailing: 'sparkle',
+  repairs: 'wrench',
+  maintenance: 'gear',
+  storage: 'storage',
+  charter: 'helm',
+};
+
+const C = {
+  en: {
+    seoTitle: 'Yacht Services in Montenegro & Bay of Kotor | DOVERO GROUP',
+    seoDesc:
+      'Yacht detailing and polishing, fiberglass and gelcoat repairs, maintenance, winter storage and yacht charter in Tivat, Kotor, Herceg Novi and Budva.',
+    heroKicker: 'Premium marine services',
+    heroSeo: 'Yacht services in the Bay of Kotor, Montenegro',
+    heroTag: 'Take care of your yacht',
+    heroText:
+      'From professional polishing and repairs to safe winter storage and unforgettable yacht charters — we are your trusted partner in Boka Bay.',
+    script: ['Boka Bay.', 'Our Passion.'],
+    scroll: 'Scroll to content',
+    servicesLabel: 'Our services',
+    whyLabel: 'Why choose DOVERO GROUP?',
+    whyTitle: ['Excellence in', 'Marine Care'],
+    whyText:
+      'With a passion for the sea and an eye for detail, DOVERO GROUP delivers top-quality yacht services — keeping your yacht in perfect condition all year round.',
+    whyPoints: [
+      { icon: 'shield', t: ['Professional', '& Reliable'] },
+      { icon: 'diamond', t: ['Premium', 'Quality'] },
+      { icon: 'yacht', t: ['All-in-One', 'Service'] },
+      { icon: 'handshake', t: ['Trusted', 'Partner'] },
+    ],
+    introLabel: 'DOVERO GROUP',
+    introTitle: ['Your yacht.', 'Our standard of excellence.'],
+    introText: [
+      'DOVERO GROUP is a yacht services company working across the Bay of Kotor. We look after yachts for owners, captains, management companies and charter operators who expect their vessel to be cared for properly — and to be told the truth about its condition.',
+      'Every job, from a single repair to year-round maintenance, follows the same approach: a careful look first, a clear proposal, and work carried out with the patience a yacht deserves.',
+    ],
+    values: [
+      { t: 'Attention to detail', d: 'The finish on a cleat, the edge of a repair, the line of a polished hull.' },
+      { t: 'Professional approach', d: 'Clear communication, agreed timing and a written proposal before work begins.' },
+      { t: 'Tailored solutions', d: 'We recommend what your yacht needs — not a standard package.' },
+      { t: 'Quality workmanship', d: 'Careful preparation and the right products for every surface.' },
+      { t: 'Reliability', d: 'We do what we agree, when we agree it, and keep you informed.' },
+      { t: 'Care for every vessel', d: 'From a day cruiser to a flybridge yacht, every vessel is treated as our own.' },
+    ],
+    filmLabel: 'On the water',
+    filmTitle: ['The Bay of Kotor', 'is where we work.'],
+    filmText:
+      'Between the mountains and the open Adriatic, the bay is one of the most beautiful cruising grounds in the Mediterranean — and a demanding environment for a yacht. Sun, salt and sea are why care here has to be consistent.',
+    areasLabel: 'Where we work',
+    areasTitle: 'Across the Bay of Kotor and the Montenegrin coast.',
+    areasText: 'We work with yachts based in and around these locations. Not sure if we cover your marina? Just ask.',
+    galleryLabel: 'Gallery',
+    galleryTitle: ['Selected work', '& moments at sea.'],
+    aboutLabel: 'About us',
+    aboutTitle: ['Built around quality.', 'Defined by detail.'],
+    aboutText:
+      'DOVERO GROUP is built on a simple idea: a yacht owner should be able to hand over their vessel and know it will be looked after with the same care they would give it themselves. That idea shapes every job we take on.',
+    ctaLabel: 'Request a quote',
+    ctaTitle: 'Let’s take care of your yacht.',
+    ctaText:
+      'Whether you need professional detailing, maintenance, repairs or seasonal preparation, our team is ready to discuss your requirements.',
+  },
+  me: {
+    seoTitle: 'Održavanje i usluge za jahte, Crna Gora | DOVERO GROUP',
+    seoDesc:
+      'DOVERO GROUP: detailing i poliranje jahti, popravke fiberglasa i gelcoata, održavanje, zimski smještaj plovila i najam jahti u Tivtu, Kotoru, Herceg Novom i Budvi.',
+    heroKicker: 'Premium pomorske usluge',
+    heroSeo: 'Usluge za jahte u Boki Kotorskoj, Crna Gora',
+    heroTag: 'Brinemo o vašoj jahti',
+    heroText:
+      'Od profesionalnog poliranja i popravki do sigurnog zimskog smještaja i nezaboravnog najma jahti — vaš pouzdani partner u Boki Kotorskoj.',
+    script: ['Boka Kotorska.', 'Naša strast.'],
+    scroll: 'Dalje na sadržaj',
+    servicesLabel: 'Naše usluge',
+    whyLabel: 'Zašto DOVERO GROUP?',
+    whyTitle: ['Izvrsnost u', 'njezi plovila'],
+    whyText:
+      'Sa ljubavlju prema moru i okom za detalje, DOVERO GROUP pruža vrhunske usluge za jahte — kako bi vaša jahta bila u savršenom stanju tokom cijele godine.',
+    whyPoints: [
+      { icon: 'shield', t: ['Profesionalno', 'i pouzdano'] },
+      { icon: 'diamond', t: ['Vrhunski', 'kvalitet'] },
+      { icon: 'yacht', t: ['Sve na', 'jednom mjestu'] },
+      { icon: 'handshake', t: ['Pouzdan', 'partner'] },
+    ],
+    introLabel: 'DOVERO GROUP',
+    introTitle: ['Vaša jahta.', 'Naš standard izvrsnosti.'],
+    introText: [
+      'DOVERO GROUP je kompanija koja pruža usluge za jahte širom Boke Kotorske. Brinemo o jahtama vlasnika, kapetana, menadžment kompanija i čarter operatera koji očekuju da se o njihovom plovilu brine kako treba — i da dobiju istinu o njegovom stanju.',
+      'Svaki posao, od jedne popravke do održavanja tokom cijele godine, prati isti pristup: prvo pažljiv pregled, zatim jasna ponuda i rad izveden sa strpljenjem koje jahta zaslužuje.',
+    ],
+    values: [
+      { t: 'Pažnja prema detaljima', d: 'Sjaj bitve, ivica popravke, linija ispoliranog trupa.' },
+      { t: 'Profesionalan pristup', d: 'Jasna komunikacija, dogovoreni rokovi i pisana ponuda prije početka rada.' },
+      { t: 'Rješenja po mjeri', d: 'Preporučujemo ono što je vašoj jahti potrebno — ne standardni paket.' },
+      { t: 'Kvalitetna izrada', d: 'Pažljiva priprema i prava sredstva za svaku površinu.' },
+      { t: 'Pouzdanost', d: 'Radimo ono što dogovorimo, kada dogovorimo, i redovno vas obavještavamo.' },
+      { t: 'Briga o svakom plovilu', d: 'Od dnevne jahte do jahte sa flybridgeom — prema svakoj kao da je naša.' },
+    ],
+    filmLabel: 'Na moru',
+    filmTitle: ['Boka Kotorska', 'je mjesto gdje radimo.'],
+    filmText:
+      'Između planina i otvorenog Jadrana, Boka je jedno od najljepših nautičkih odredišta Mediterana — i zahtjevno okruženje za jahtu. Sunce, so i more razlog su zašto briga ovdje mora biti stalna.',
+    areasLabel: 'Gdje radimo',
+    areasTitle: 'Širom Boke Kotorske i crnogorskog primorja.',
+    areasText: 'Radimo sa jahtama koje su smještene u ovim mjestima i oko njih. Niste sigurni da li pokrivamo vašu marinu? Samo pitajte.',
+    galleryLabel: 'Galerija',
+    galleryTitle: ['Izdvojeni radovi', 'i trenuci na moru.'],
+    aboutLabel: 'O nama',
+    aboutTitle: ['Građeno na kvalitetu.', 'Definisano detaljem.'],
+    aboutText:
+      'DOVERO GROUP počiva na jednostavnoj ideji: vlasnik jahte treba da može da preda svoje plovilo i zna da će se o njemu brinuti s istom pažnjom kao što bi to činio sam. Ta ideja oblikuje svaki posao koji preuzmemo.',
+    ctaLabel: 'Zatražite ponudu',
+    ctaTitle: 'Pobrinimo se za vašu jahtu.',
+    ctaText:
+      'Bilo da vam je potreban profesionalni detailing, održavanje, popravke ili sezonska priprema, naš tim je spreman da razgovara o vašim zahtjevima.',
+  },
+}[lang];
+
+// Art-directed hero: landscape photo on desktop, portrait on phones.
+const desktop = await responsiveSet(PHOTOS.cruising.src, [828, 1280, 1600, 2000]);
+const mobile = await responsiveSet(PHOTOS.convoy.src, [480, 640, 828, 1080]);
+const og = await ogImage(PHOTOS.cruising.src);
+const logo = await getImage({ src: logoPng, width: 600, format: 'png' });
+const MQ = '(max-width: 760px)';
+---
+
+<BaseLayout
+  lang={lang}
+  route="home"
+  title={C.seoTitle}
+  description={C.seoDesc}
+  transparentHeader
+  ogImage={{ ...og, alt: PHOTOS.cruising.alt[lang] }}
+  jsonLd={[organizationSchema(lang, logo.src), websiteSchema(lang)]}
+>
+  <Fragment slot="head">
+    <link rel="preload" as="image" type="image/avif" media={MQ} imagesrcset={mobile.avif} imagesizes="100vw" fetchpriority="high" />
+    <link rel="preload" as="image" type="image/avif" media="(min-width: 761px)" imagesrcset={desktop.avif} imagesizes="100vw" fetchpriority="high" />
+  </Fragment>
+
+  <!-- ───────────── HERO ───────────── -->
+  <section class="hero">
+    <picture>
+      <source media={MQ} type="image/avif" srcset={mobile.avif} sizes="100vw" />
+      <source media={MQ} type="image/webp" srcset={mobile.webp} sizes="100vw" />
+      <source type="image/avif" srcset={desktop.avif} sizes="100vw" />
+      <source type="image/webp" srcset={desktop.webp} sizes="100vw" />
+      <img class="hero-img" src={desktop.fallback} alt={PHOTOS.cruising.alt[lang]} width={desktop.width} height={desktop.height} fetchpriority="high" loading="eager" decoding="async" />
+    </picture>
+    <div class="hero-shade" aria-hidden="true"></div>
+
+    <div class="container hero-inner">
+      <h1 class="hero-title">
+        <span class="label label--rule hero-kicker">{C.heroKicker}</span>
+        <span class="hero-brand">DOVERO GROUP</span>
+        <span class="hero-tag">{C.heroTag}</span>
+        <span class="visually-hidden"> — {C.heroSeo}</span>
+      </h1>
+      <p class="hero-text">{C.heroText}</p>
+      <div class="hero-actions">
+        <a class="btn" href={url('services', lang)}>{s.cta.explore}<Icon name="arrow" size={10} /></a>
+        <a class="btn btn--ghost" href={url('contact', lang, 'inquiry')} data-track="quote_request" data-track-label="home_hero">{s.cta.quote}</a>
+      </div>
+    </div>
+
+    <p class="hero-script" aria-hidden="true">
+      <span>{C.script[0]}</span>
+      <span>{C.script[1]}</span>
+      <svg viewBox="0 0 220 30" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M4 24C60 16 140 8 216 4" /></svg>
+    </p>
+
+    <a class="hero-mouse" href="#services"><span class="visually-hidden">{C.scroll}</span><span class="hero-mouse-dot" aria-hidden="true"></span></a>
+  </section>
+
+  <!-- ───────────── SERVICE CARDS (overlap the hero, as in the brand mockup) ───────────── -->
+  <section class="cards" id="services" aria-labelledby="cards-title">
+    <div class="container">
+      <h2 class="visually-hidden" id="cards-title">{C.servicesLabel}</h2>
+      <ul role="list" class="card-row">
+        {
+          SERVICE_LIST.map((svc, i) => (
+            <li data-reveal style={`--reveal-delay:${i * 0.07}s`}>
+              <a class="card" href={url(svc.route, lang)}>
+                <Photo photo={svc.heroPhoto} lang={lang} sizes="(max-width: 760px) 80vw, (max-width: 1100px) 45vw, 20vw" widths={[360, 540, 720]} class="cover card-img" />
+                <span class="card-shade" aria-hidden="true" />
+                <span class="card-body">
+                  <span class="card-icon"><Icon name={SERVICE_ICON[svc.key]} size={40} /></span>
+                  <span class="card-text">
+                    <span class="card-title">{svc.name[lang]}</span>
+                    <span class="card-more">{s.cta.learnMore}<Icon name="arrow" size={8} /></span>
+                  </span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ───────────── WHY ───────────── -->
+  <section class="why">
+    <div class="why-media" data-reveal="fade">
+      <Photo photo="stern" lang={lang} sizes="(max-width: 1000px) 100vw, 42vw" widths={[640, 960, 1280]} class="cover" />
+    </div>
+    <div class="why-body">
+      <div class="why-copy" data-reveal>
+        <p class="label label--rule">{C.whyLabel}</p>
+        <h2 class="why-title">{C.whyTitle[0]}<br />{C.whyTitle[1]}</h2>
+        <p class="why-text">{C.whyText}</p>
+        <a class="btn btn--ghost why-btn" href={url('about', lang)}>{s.nav.about}<Icon name="arrow" size={9} /></a>
+      </div>
+      <ul role="list" class="why-points" data-reveal>
+        {
+          C.whyPoints.map((pt) => (
+            <li>
+              <Icon name={pt.icon as 'shield'} size={46} class="why-ic" />
+              <span>{pt.t[0]}<br />{pt.t[1]}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ───────────── INTRO + VALUES ───────────── -->
+  <section class="section section--light intro">
+    <div class="container intro-grid">
+      <div class="intro-head" data-reveal>
+        <p class="label label--rule">{C.introLabel}</p>
+        <h2 class="intro-title">{C.introTitle[0]} <em>{C.introTitle[1]}</em></h2>
+        <div class="prose intro-copy">
+          {C.introText.map((p, i) => <p class={i === 0 ? 'lead' : 'muted'}>{p}</p>)}
+        </div>
+      </div>
+      <ol role="list" class="values">
+        {
+          C.values.map((v, i) => (
+            <li data-reveal style={`--reveal-delay:${(i % 2) * 0.08}s`}>
+              <span class="v-num">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="v-t">{v.t}</h3>
+              <p class="v-d">{v.d}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- ───────────── FILM ───────────── -->
+  <section class="section section--sand film">
+    <div class="container film-grid">
+      <header class="film-head" data-reveal>
+        <p class="label label--rule">{C.filmLabel}</p>
+        <h2>{C.filmTitle[0]} <em>{C.filmTitle[1]}</em></h2>
+        <p class="muted film-text">{C.filmText}</p>
+      </header>
+      <FilmReel lang={lang} films={['arrival', 'openWater', 'harbour']} />
+    </div>
+  </section>
+
+  <!-- ───────────── AREAS ───────────── -->
+  <section class="section section--sm section--navy areas">
+    <div class="container areas-grid">
+      <div data-reveal>
+        <p class="label label--rule">{C.areasLabel}</p>
+        <h2 class="areas-title">{C.areasTitle}</h2>
+        <p class="muted areas-text">{C.areasText}</p>
+      </div>
+      <ul role="list" class="areas-list" data-reveal>
+        {
+          SERVICE_AREAS.map((a, i) => (
+            <li>
+              <span class="areas-num">{String(i + 1).padStart(2, '0')}</span>
+              <span class="areas-name">{a.name}</span>
+              {a.detail && <span class="areas-detail">{a.detail}</span>}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ───────────── GALLERY ───────────── -->
+  <section class="section section--light gallery-sec" id="gallery">
+    <div class="container">
+      <header class="sec-head" data-reveal>
+        <p class="label label--rule">{C.galleryLabel}</p>
+        <h2>{C.galleryTitle[0]} <em>{C.galleryTitle[1]}</em></h2>
+      </header>
+      <Gallery lang={lang} />
+    </div>
+  </section>
+
+  <!-- ───────────── ABOUT ───────────── -->
+  <section class="section section--sand about">
+    <div class="container about-grid">
+      <div class="about-copy" data-reveal>
+        <p class="label label--rule">{C.aboutLabel}</p>
+        <h2>{C.aboutTitle[0]} <em>{C.aboutTitle[1]}</em></h2>
+        <p class="lead about-text">{C.aboutText}</p>
+        <a class="btn btn--ghost" href={url('about', lang)}>{s.cta.about}<Icon name="arrow" size={10} /></a>
+      </div>
+      <div class="about-media frame" data-reveal="mask">
+        <Photo photo="flybridge" lang={lang} sizes="(max-width: 900px) 92vw, 40vw" widths={[640, 960, 1080]} class="cover" />
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} photo="convoy" eyebrow={C.ctaLabel} title={C.ctaTitle} text={C.ctaText} placement="home_cta" />
+</BaseLayout>
+
+<style>
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: max(100svh, 46rem);
+    padding-bottom: 19rem; /* room for the overlapping cards */
+    color: var(--on-dark);
+    background: var(--navy-deep);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .hero-img {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 62% 58%;
+    filter: saturate(0.92) brightness(0.92);
+  }
+  .hero-shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(to right, rgba(5, 10, 18, 0.9) 0%, rgba(5, 10, 18, 0.62) 34%, rgba(5, 10, 18, 0.12) 62%, rgba(5, 10, 18, 0.05) 100%),
+      linear-gradient(to top, var(--surface) 0%, rgba(10, 18, 29, 0.75) 18%, rgba(10, 18, 29, 0) 45%),
+      linear-gradient(to bottom, rgba(5, 10, 18, 0.65), transparent 22%);
+  }
+  .hero-inner {
+    padding-top: calc(var(--header-h) + clamp(2rem, 6vh, 4.5rem));
+  }
+  .hero-title {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-sans);
+    font-size: inherit;
+    line-height: inherit;
+    letter-spacing: 0;
+  }
+  .hero-kicker {
+    margin-bottom: 1.25rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+  }
+  .hero-kicker::after {
+    width: clamp(3rem, 8vw, 7rem);
+  }
+  .hero-brand {
+    font-family: var(--font-sans);
+    font-size: clamp(2.9rem, 1.4rem + 5.4vw, 6.25rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    color: #fff;
+  }
+  .hero-tag {
+    margin-top: 0.9rem;
+    font-family: var(--font-sans);
+    font-size: clamp(1.15rem, 0.7rem + 1.7vw, 2.35rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    background: var(--gold-grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero-text {
+    margin-top: 1.75rem;
+    max-width: 30rem;
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+    line-height: 1.65;
+    color: rgba(242, 238, 228, 0.9);
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.25rem;
+  }
+  .hero-script {
+    position: absolute;
+    right: max(var(--gutter), calc((100vw - var(--container)) / 2 + 1rem));
+    bottom: 22rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-family: var(--font-script);
+    font-size: clamp(2.6rem, 1.6rem + 2.4vw, 4.2rem);
+    line-height: 0.95;
+    color: rgba(255, 255, 255, 0.92);
+    transform: rotate(-8deg);
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
+  }
+  .hero-script span:first-child {
+    margin-right: 3.5rem;
+  }
+  .hero-script svg {
+    width: 12rem;
+    margin-top: -0.4rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .hero-mouse {
+    position: absolute;
+    left: 50%;
+    bottom: 20.5rem;
+    display: grid;
+    justify-items: center;
+    width: 1.6rem;
+    height: 2.6rem;
+    margin-left: -0.8rem;
+    border: 1.5px solid rgba(255, 255, 255, 0.7);
+    border-radius: 1rem;
+  }
+  .hero-mouse-dot {
+    width: 3px;
+    height: 7px;
+    margin-top: 0.45rem;
+    border-radius: 2px;
+    background: var(--gold);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-img {
+      animation: hero-zoom 3s var(--ease-out) both;
+    }
+    .hero-title > *,
+    .hero-text,
+    .hero-actions,
+    .hero-script {
+      animation: hero-rise 1.2s var(--ease-out) both;
+    }
+    .hero-brand {
+      animation-delay: 0.08s !important;
+    }
+    .hero-tag {
+      animation-delay: 0.16s !important;
+    }
+    .hero-text {
+      animation-delay: 0.26s;
+    }
+    .hero-actions {
+      animation-delay: 0.36s;
+    }
+    .hero-script {
+      animation-delay: 0.6s;
+    }
+    .hero-mouse-dot {
+      animation: mouse 2s var(--ease) infinite;
+    }
+  }
+  @keyframes hero-zoom {
+    from {
+      transform: scale(1.07);
+    }
+  }
+  @keyframes hero-rise {
+    from {
+      opacity: 0;
+      translate: 0 24px;
+    }
+  }
+  @keyframes mouse {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    70% {
+      transform: translateY(9px);
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* ── CARDS ── */
+  .cards {
+    position: relative;
+    z-index: 2;
+    margin-top: -17.5rem;
+    padding-bottom: clamp(4rem, 7vw, 6rem);
+  }
+  .card-row {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.2vw, 1.1rem);
+    margin: 0;
+    padding: 0;
+  }
+  .card {
+    position: relative;
+    display: block;
+    height: clamp(14rem, 17.5vw, 16.5rem);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--surface-3);
+    box-shadow: 0 24px 50px -24px rgba(0, 0, 0, 0.75);
+    transition:
+      border-color 0.4s var(--ease),
+      transform 0.5s var(--ease-out);
+  }
+  .card :global(.card-img) {
+    position: absolute;
+    inset: 0;
+    transition: transform 1.2s var(--ease-out);
+  }
+  .card-shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(5, 10, 18, 0.95) 0%, rgba(5, 10, 18, 0.55) 45%, rgba(5, 10, 18, 0.05) 80%);
+  }
+  .card-body {
+    position: absolute;
+    inset: auto 0 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    padding: 1.25rem 1.2rem 1.3rem;
+  }
+  .card-icon {
+    flex: none;
+    color: var(--gold);
+  }
+  .card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+  .card-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .card-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(242, 238, 228, 0.85);
+    transition: color 0.3s var(--ease);
+  }
+  .card:hover {
+    border-color: rgba(236, 211, 160, 0.6);
+    transform: translateY(-4px);
+  }
+  .card:hover :global(.card-img) {
+    transform: scale(1.06);
+  }
+  .card:hover .card-more {
+    color: var(--gold-soft);
+  }
+
+  /* ── WHY ── */
+  .why {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
+    min-height: 26rem;
+    background: linear-gradient(90deg, var(--surface) 0%, #070d16 100%);
+    border-top: 1px solid var(--line-dark);
+    border-bottom: 1px solid var(--line-dark);
+  }
+  .why-media {
+    position: relative;
+    overflow: hidden;
+  }
+  .why-media :global(img) {
+    position: absolute;
+    inset: 0;
+  }
+  .why-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, transparent 55%, #09111b 100%);
+  }
+  .why-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    align-items: center;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    padding: clamp(3rem, 6vw, 5rem) max(var(--gutter), calc((100vw - var(--container)) / 2)) clamp(3rem, 6vw, 5rem) clamp(2rem, 4vw, 3.5rem);
+  }
+  .why-copy .label {
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+  }
+  .why-title {
+    margin-top: 1rem;
+    font-size: clamp(2.2rem, 1.5rem + 2vw, 3.3rem);
+    line-height: 1.02;
+    color: #fff;
+  }
+  .why-text {
+    margin-top: 1.25rem;
+    max-width: 26rem;
+    font-size: 0.98rem;
+    color: rgba(242, 238, 228, 0.86);
+  }
+  .why-btn {
+    margin-top: 1.75rem;
+    min-height: 2.85rem;
+    padding: 0.6rem 1.4rem;
+    font-size: 0.72rem;
+  }
+  .why-points {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+  }
+  .why-points li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 0.5rem;
+    text-align: center;
+    font-size: 0.92rem;
+    line-height: 1.35;
+    color: rgba(242, 238, 228, 0.92);
+  }
+  .why-points li + li {
+    border-left: 1px solid rgba(236, 211, 160, 0.25);
+  }
+  .why-points :global(.why-ic) {
+    color: var(--gold);
+    width: 3.2rem;
+    height: 3.2rem;
+  }
+
+  /* ── shared ── */
+  .sec-head {
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+  .sec-head h2 {
+    margin-top: 1.5rem;
+    max-width: 16ch;
+  }
+  h2 em {
+    color: var(--gold-soft);
+  }
+
+  /* ── INTRO ── */
+  .intro-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(2.5rem, 7vw, 7rem);
+    align-items: start;
+  }
+  .intro-head {
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+  }
+  .intro-title {
+    margin-top: 1.5rem;
+    font-size: var(--fs-h2);
+  }
+  .intro-title em {
+    display: block;
+  }
+  .intro-copy {
+    margin-top: 2rem;
+  }
+  .values {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 clamp(1.5rem, 3vw, 3rem);
+    margin: 0;
+    padding: 0;
+  }
+  .values li {
+    padding: 1.75rem 0 2rem;
+    border-top: 1px solid var(--line-dark);
+  }
+  .v-num {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+  }
+  .v-t {
+    margin-top: 0.75rem;
+    font-size: clamp(1.4rem, 1.2rem + 0.6vw, 1.75rem);
+  }
+  .v-d {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  /* ── FILM ── */
+  .film-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: start;
+  }
+  .film-head {
+    position: sticky;
+    top: calc(var(--header-h) + 2.5rem);
+  }
+  .film-head h2 {
+    margin-top: 1.5rem;
+  }
+  .film-text {
+    margin-top: 1.5rem;
+  }
+  .film :global(.reel-frame) {
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+  }
+
+  /* ── AREAS ── */
+  .areas-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .areas-title {
+    margin-top: 1.5rem;
+    font-size: var(--fs-h3);
+    line-height: 1.15;
+    max-width: 20ch;
+  }
+  .areas-text {
+    margin-top: 1.25rem;
+    max-width: 28rem;
+  }
+  .areas-list {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line-dark);
+  }
+  .areas-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--line-dark);
+  }
+  .areas-num {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+  }
+  .areas-name {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 1.4rem + 2.2vw, 3.5rem);
+    line-height: 1;
+  }
+  .areas-detail {
+    margin-left: auto;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: clamp(2.5rem, 7vw, 7.5rem);
+    align-items: center;
+  }
+  .about-copy h2 {
+    margin-top: 1.5rem;
+  }
+  .about-text {
+    margin: 1.75rem 0 2.5rem;
+    max-width: 34rem;
+    color: var(--ink-soft);
+  }
+  .about-media {
+    aspect-ratio: 4 / 5;
+    border: 1px solid var(--card-border);
+  }
+  .about-media :global(img) {
+    position: absolute;
+    inset: 0;
+  }
+
+  @media (max-width: 1240px) {
+    .why {
+      grid-template-columns: minmax(0, 32fr) minmax(0, 68fr);
+    }
+    .why-body {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 1100px) {
+    .card-row {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .film-grid {
+      grid-template-columns: 1fr;
+    }
+    .film-head {
+      position: static;
+      max-width: 40rem;
+    }
+    .hero-script {
+      display: none;
+    }
+  }
+  @media (max-width: 900px) {
+    .why {
+      grid-template-columns: 1fr;
+    }
+    .why-media {
+      aspect-ratio: 16 / 9;
+    }
+    .why-media::after {
+      background: linear-gradient(to bottom, transparent 50%, #09111b 100%);
+    }
+    .why-body {
+      padding: 2.5rem var(--gutter) 3.5rem;
+    }
+    .intro-grid,
+    .areas-grid,
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+    .intro-head {
+      position: static;
+    }
+    .about-media {
+      aspect-ratio: 4 / 3;
+      order: -1;
+    }
+  }
+  @media (max-width: 760px) {
+    .hero {
+      min-height: 100svh;
+      padding-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .hero-inner {
+      padding-top: calc(var(--header-h) + 3rem);
+      padding-bottom: 3rem;
+    }
+    .hero-shade {
+      background:
+        linear-gradient(to top, var(--surface) 0%, rgba(5, 10, 18, 0.78) 32%, rgba(5, 10, 18, 0.1) 62%),
+        linear-gradient(to bottom, rgba(5, 10, 18, 0.6), transparent 25%);
+    }
+    .hero-tag {
+      letter-spacing: 0.16em;
+    }
+    .hero-mouse {
+      display: none;
+    }
+    .hero-actions .btn {
+      flex: 1 1 100%;
+    }
+    .cards {
+      margin-top: 0;
+      padding-top: 0.5rem;
+    }
+    .card-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 0 var(--gutter) 0.5rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+    .card-row::-webkit-scrollbar {
+      display: none;
+    }
+    .card-row > li {
+      flex: 0 0 78%;
+      scroll-snap-align: start;
+    }
+    .card {
+      height: 15rem;
+    }
+    .why-points {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .why-points li:nth-child(3) {
+      border-left: 0;
+    }
+    .why-points li:nth-child(n + 3) {
+      border-top: 1px solid rgba(236, 211, 160, 0.25);
+    }
+    .values {
+      grid-template-columns: 1fr;
+    }
+    .areas-detail {
+      display: none;
+    }
+  }
+</style>

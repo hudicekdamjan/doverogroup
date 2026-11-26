@@ -1,0 +1,136 @@
+---
+/** Closing call to action: copy on deep navy with a photograph bleeding to the edge. */
+import Photo from './Photo.astro';
+import Icon from './Icon.astro';
+import { url, type Locale } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+import { CONTACT, LINKS } from '@/config/site';
+import type { PhotoKey } from '@/content/media';
+import type { ServiceKey } from '@/i18n/ui';
+
+interface Props {
+  lang: Locale;
+  photo: PhotoKey;
+  title: string;
+  text: string;
+  /** Pre-selects the service in the inquiry form. */
+  service?: ServiceKey;
+  placement: string;
+  eyebrow?: string;
+}
+const { lang, photo, title, text, service, placement, eyebrow } = Astro.props;
+const s = t(lang);
+const quoteHref = service ? `${url('contact', lang)}?service=${service}#inquiry` : url('contact', lang, 'inquiry');
+---
+
+<section class="cta-band on-dark">
+  <div class="cta-copy">
+    <div data-reveal>
+      {eyebrow && <p class="label label--rule">{eyebrow}</p>}
+      <h2 class="cta-title">{title}</h2>
+      <p class="lead cta-text">{text}</p>
+      <div class="cta-actions">
+        <a class="btn" href={quoteHref} data-track="quote_request" data-track-label={placement}>
+          {s.cta.quote}
+          <Icon name="arrow" size={10} />
+        </a>
+        <a class="btn btn--ghost" href={LINKS.whatsapp} target="_blank" rel="noopener" data-track="whatsapp_click" data-track-label={placement}>
+          <Icon name="whatsapp" size={18} />
+          {s.cta.whatsapp}
+        </a>
+      </div>
+      <p class="cta-phone">
+        <a href={LINKS.tel} data-track="phone_click" data-track-label={placement}><Icon name="phone" size={16} />{CONTACT.phoneDisplay}</a>
+        <span aria-hidden="true">·</span>
+        <a href={LINKS.viber} data-track="viber_click" data-track-label={placement}><Icon name="viber" size={16} />Viber</a>
+      </p>
+    </div>
+  </div>
+  <div class="cta-media">
+    <Photo photo={photo} lang={lang} sizes="(max-width: 900px) 100vw, 45vw" widths={[480, 828, 1080, 1440]} class="cover cta-img" />
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    --edge: max(var(--gutter), calc((100vw - var(--container)) / 2));
+    display: grid;
+    grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
+    min-height: clamp(36rem, 86vh, 54rem);
+    background: var(--navy-dark);
+    color: var(--on-dark);
+  }
+  .cta-copy {
+    display: flex;
+    align-items: center;
+    padding: var(--section) clamp(2rem, 6vw, 6rem) var(--section) var(--edge);
+    background:
+      radial-gradient(120% 80% at 0% 100%, rgba(30, 48, 70, 0.65), transparent 60%),
+      var(--navy-dark);
+  }
+  .cta-copy .label {
+    color: var(--gold);
+  }
+  .cta-title {
+    margin-top: 1.5rem;
+    max-width: 12ch;
+    font-size: var(--fs-h1);
+    line-height: 0.98;
+  }
+  .cta-text {
+    margin-top: 1.75rem;
+    max-width: 32rem;
+    color: rgba(242, 238, 228, 0.82);
+  }
+  .cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+  .cta-phone {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: var(--on-dark-soft);
+  }
+  .cta-phone a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    transition: color 0.3s var(--ease);
+  }
+  .cta-phone a:hover {
+    color: var(--gold-soft);
+  }
+  .cta-phone :global(svg) {
+    color: var(--gold);
+  }
+  .cta-media {
+    position: relative;
+    overflow: hidden;
+    background: var(--navy-deep);
+  }
+  .cta-media :global(.cta-img) {
+    position: absolute;
+    inset: 0;
+  }
+  @media (max-width: 900px) {
+    .cta-band {
+      grid-template-columns: 1fr;
+    }
+    .cta-copy {
+      padding: var(--section-sm) var(--gutter);
+    }
+    .cta-media {
+      aspect-ratio: 4 / 3;
+      order: -1;
+    }
+    .cta-actions .btn {
+      flex: 1 1 100%;
+    }
+  }
+</style>

@@ -1,0 +1,95 @@
+---
+import { LOCALES, LOCALE_META, url, type Locale, type RouteKey } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+
+interface Props {
+  lang: Locale;
+  route?: RouteKey;
+  class?: string;
+}
+const { lang, route = 'home', class: className } = Astro.props;
+const s = t(lang);
+---
+
+<nav class:list={['lang-switch', className]} aria-label={s.nav.language}>
+  <ul role="list">
+    {
+      LOCALES.map((l) => (
+        <li>
+          <a
+            href={url(route, l)}
+            hreflang={LOCALE_META[l].hreflang}
+            lang={LOCALE_META[l].htmlLang}
+            aria-current={l === lang ? 'true' : undefined}
+            title={LOCALE_META[l].label}
+            data-track="language_switch"
+            data-track-label={l}
+          >
+            <span class="flag" aria-hidden="true">
+              {l === 'en' ? (
+                <svg viewBox="0 0 60 30" width="24" height="16" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169" /><path d="M0 0l60 30M60 0L0 30" stroke="#fff" stroke-width="6" /><path d="M0 0l60 30M60 0L0 30" stroke="#C8102E" stroke-width="2" /><path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10" /><path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6" /></svg>
+              ) : (
+                <svg viewBox="0 0 24 16" width="24" height="16"><rect width="24" height="16" fill="#C8A64B" /><rect x="1.1" y="1.1" width="21.8" height="13.8" fill="#C40308" /><path d="M9.6 6.2l1.2 1.1 1.2-1.6 1.2 1.6 1.2-1.1-.4 3.2c-.6.9-1.3 1.4-2 1.6-.7-.2-1.4-.7-2-1.6z" fill="#D3AE3B" /><circle cx="12" cy="5.2" r=".7" fill="#D3AE3B" /></svg>
+              )}
+            </span>
+            <span class="lang-short" aria-hidden="true">{LOCALE_META[l].short}</span>
+            <span class="visually-hidden">{LOCALE_META[l].label}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .lang-switch ul {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .flag {
+    display: block;
+    line-height: 0;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
+  }
+  .lang-short {
+    display: none;
+  }
+  :global(.mobile-menu) .lang-short,
+  :global(.site-footer) .lang-short {
+    display: inline;
+  }
+  .lang-switch li + li::before {
+    content: none;
+    display: inline-block;
+    width: 1px;
+    height: 0.8rem;
+    margin-inline: 0.15rem;
+    background: currentColor;
+    opacity: 0.35;
+    vertical-align: middle;
+  }
+  .lang-switch a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.6rem 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    opacity: 0.6;
+    transition: opacity 0.3s var(--ease);
+  }
+  .lang-switch a:hover,
+  .lang-switch a[aria-current='true'] {
+    opacity: 1;
+  }
+  .lang-switch a[aria-current='true'] {
+    color: var(--gold);
+  }
+</style>

@@ -1,0 +1,396 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Photo from '@/components/Photo.astro';
+import FilmReel from '@/components/FilmReel.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { PHOTOS } from '@/content/media';
+import { ogImage } from '@/lib/images';
+import { breadcrumbSchema, ORG_ID } from '@/lib/schema';
+import { type Locale } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+import { SERVICE_AREAS } from '@/config/site';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const s = t(lang);
+
+const C = {
+  en: {
+    seoTitle: 'About DOVERO GROUP — Yacht Care in the Bay of Kotor',
+    seoDesc:
+      'DOVERO GROUP is a yacht services company in the Bay of Kotor, Montenegro. Our approach to yacht care: precision, reliability and attention to detail.',
+    eyebrow: 'About DOVERO GROUP',
+    h1: 'Built around quality. Defined by detail.',
+    lead: 'A yacht services company for owners, captains and charter operators in the Bay of Kotor — built on careful work, clear communication and respect for every vessel.',
+    manifestoLabel: 'Our approach',
+    manifesto: ['A yacht reveals how it has been cared for.', 'We make sure it shows the right things.'],
+    body: [
+      'DOVERO GROUP provides detailing and polishing, fiberglass and gelcoat repairs, maintenance, winter storage and yacht charter across the Bay of Kotor. Different services, one way of working.',
+      'We believe good yacht care is quiet. It is in the surfaces that stay clean longer, the repair you cannot find, the owner who arrives to a yacht that is ready. It comes from preparation, patience and the discipline to do each step properly — even the ones nobody will see.',
+      'We would rather give you an honest assessment than an easy promise. If your yacht does not need something, we will tell you. If a job is outside what we do, we will tell you that too.',
+    ],
+    valuesLabel: 'What we stand for',
+    valuesTitle: ['Six principles,', 'applied to every job.'],
+    values: [
+      { t: 'Professionalism', d: 'Clear proposals, agreed timing and respectful conduct on board and in the marina.' },
+      { t: 'Precision', d: 'Careful preparation and methodical work — the result depends on every step before it.' },
+      { t: 'Quality', d: 'The right products and techniques for each material, never a shortcut to finish sooner.' },
+      { t: 'Reliability', d: 'We do what we agree, when we agree it, and keep you informed along the way.' },
+      { t: 'Personal approach', d: 'One point of contact who knows your yacht and how you like things done.' },
+      { t: 'Attention to every detail', d: 'Fittings, edges, seams and corners. The details are where quality becomes visible.' },
+    ],
+    workLabel: 'How we work',
+    work: [
+      { t: 'We look first.', d: 'Every job begins with an honest assessment of the yacht’s condition — in person or from your photos.' },
+      { t: 'We explain clearly.', d: 'You receive a straightforward proposal: what we recommend, why, how long it takes and what it costs.' },
+      { t: 'We finish properly.', d: 'Work is completed carefully and checked with you or your captain before we call it done.' },
+    ],
+    clientsLabel: 'Who we work with',
+    clients: [
+      { t: 'Yacht owners', d: 'Owners who want their yacht looked after properly — whether they are here every weekend or a few weeks a year.' },
+      { t: 'Captains', d: 'Captains who need a dependable team for detailing, repairs and preparation around the yacht’s schedule.' },
+      { t: 'Management companies', d: 'Yacht management companies looking for a reliable partner for the vessels in their care.' },
+      { t: 'Charter operators', d: 'Charter operators who need yachts presented at their best between guests and through the season.' },
+    ],
+    areasLabel: 'Where we work',
+    areasText: 'Based in the Bay of Kotor, working with yachts in and around:',
+    ctaTitle: 'Let’s talk about your yacht.',
+    ctaText: 'Tell us what your yacht needs, or simply ask a question. We are happy to help you find the right solution.',
+  },
+  me: {
+    seoTitle: 'O nama — DOVERO GROUP, njega jahti u Boki Kotorskoj',
+    seoDesc:
+      'DOVERO GROUP je kompanija za usluge jahtama u Boki Kotorskoj, Crna Gora. Upoznajte naš pristup njezi jahti: preciznost, pouzdanost i pažnja prema svakom detalju.',
+    eyebrow: 'O kompaniji DOVERO GROUP',
+    h1: 'Građeno na kvalitetu. Definisano detaljem.',
+    lead: 'Kompanija za usluge jahtama, za vlasnike, kapetane i čarter operatere u Boki Kotorskoj — zasnovana na pažljivom radu, jasnoj komunikaciji i poštovanju prema svakom plovilu.',
+    manifestoLabel: 'Naš pristup',
+    manifesto: ['Jahta pokazuje kako se o njoj brinulo.', 'Mi se trudimo da pokazuje prave stvari.'],
+    body: [
+      'DOVERO GROUP pruža usluge detailinga i poliranja, popravki fiberglasa i gelcoata, održavanja, zimskog smještaja i najma jahti širom Boke Kotorske. Različite usluge, jedan način rada.',
+      'Vjerujemo da je dobra njega jahte tiha. Vidi se u površinama koje duže ostaju čiste, u popravci koju ne možete pronaći, u vlasniku koji dolazi na spremnu jahtu. Proizilazi iz pripreme, strpljenja i discipline da se svaki korak uradi kako treba — čak i oni koje niko neće vidjeti.',
+      'Radije ćemo vam dati iskrenu procjenu nego lako obećanje. Ako vašoj jahti nešto nije potrebno, reći ćemo vam. Ako je posao van onoga čime se bavimo, reći ćemo vam i to.',
+    ],
+    valuesLabel: 'Za šta se zalažemo',
+    valuesTitle: ['Šest principa,', 'u svakom poslu.'],
+    values: [
+      { t: 'Profesionalnost', d: 'Jasne ponude, dogovoreni rokovi i odnos s poštovanjem na jahti i u marini.' },
+      { t: 'Preciznost', d: 'Pažljiva priprema i metodičan rad — rezultat zavisi od svakog prethodnog koraka.' },
+      { t: 'Kvalitet', d: 'Prava sredstva i tehnike za svaki materijal, nikada prečica da bi se ranije završilo.' },
+      { t: 'Pouzdanost', d: 'Radimo ono što dogovorimo, onda kada dogovorimo, i obavještavamo vas usput.' },
+      { t: 'Lični pristup', d: 'Jedna kontakt osoba koja poznaje vašu jahtu i način na koji želite da se stvari rade.' },
+      { t: 'Pažnja prema svakom detalju', d: 'Okovi, ivice, spojevi i uglovi. Kvalitet postaje vidljiv upravo u detaljima.' },
+    ],
+    workLabel: 'Kako radimo',
+    work: [
+      { t: 'Prvo gledamo.', d: 'Svaki posao počinje iskrenom procjenom stanja jahte — uživo ili na osnovu vaših fotografija.' },
+      { t: 'Jasno objašnjavamo.', d: 'Dobijate jednostavnu ponudu: šta preporučujemo, zašto, koliko traje i koliko košta.' },
+      { t: 'Završavamo kako treba.', d: 'Posao završavamo pažljivo i provjeravamo ga sa vama ili vašim kapetanom prije nego što ga zatvorimo.' },
+    ],
+    clientsLabel: 'S kim radimo',
+    clients: [
+      { t: 'Vlasnici jahti', d: 'Vlasnici koji žele da se o njihovoj jahti brine kako treba — bilo da su ovdje svakog vikenda ili nekoliko sedmica godišnje.' },
+      { t: 'Kapetani', d: 'Kapetani kojima je potreban pouzdan tim za detailing, popravke i pripremu, u skladu s rasporedom jahte.' },
+      { t: 'Menadžment kompanije', d: 'Kompanije za upravljanje jahtama koje traže pouzdanog partnera za plovila o kojima brinu.' },
+      { t: 'Čarter operateri', d: 'Čarter operateri kojima su jahte potrebne u najboljem izdanju između gostiju i kroz cijelu sezonu.' },
+    ],
+    areasLabel: 'Gdje radimo',
+    areasText: 'Iz Boke Kotorske radimo sa jahtama u ovim mjestima i oko njih:',
+    ctaTitle: 'Razgovarajmo o vašoj jahti.',
+    ctaText: 'Recite nam šta je vašoj jahti potrebno ili jednostavno postavite pitanje. Rado ćemo vam pomoći da pronađete pravo rješenje.',
+  },
+}[lang];
+
+const crumbs = [
+  { name: s.nav.home, route: 'home' as const },
+  { name: s.nav.about, route: 'about' as const },
+];
+const og = await ogImage(PHOTOS.dayCruiser.src);
+---
+
+<BaseLayout
+  lang={lang}
+  route="about"
+  title={C.seoTitle}
+  description={C.seoDesc}
+  ogImage={{ ...og, alt: PHOTOS.dayCruiser.alt[lang] }}
+  jsonLd={[
+    breadcrumbSchema(crumbs, lang),
+    { '@context': 'https://schema.org', '@type': 'AboutPage', name: C.seoTitle, about: { '@id': ORG_ID } },
+  ]}
+>
+  <PageHero lang={lang} photo="dayCruiser" eyebrow={C.eyebrow} title={C.h1} lead={C.lead} breadcrumbs={crumbs} />
+
+  <!-- MANIFESTO -->
+  <section class="section section--light">
+    <div class="container man-grid">
+      <div class="man-head" data-reveal>
+        <p class="label label--rule">{C.manifestoLabel}</p>
+        <h2 class="man-title">{C.manifesto[0]} <em>{C.manifesto[1]}</em></h2>
+      </div>
+      <div class="man-body prose" data-reveal>
+        {C.body.map((p, i) => <p class={i === 0 ? 'lead' : 'muted'}>{p}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="section section--dark">
+    <div class="container">
+      <header class="ab-head" data-reveal>
+        <p class="label label--rule">{C.valuesLabel}</p>
+        <h2>{C.valuesTitle[0]} <em>{C.valuesTitle[1]}</em></h2>
+      </header>
+      <ol role="list" class="values">
+        {
+          C.values.map((v, i) => (
+            <li data-reveal style={`--reveal-delay:${(i % 2) * 0.08}s`}>
+              <span class="v-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3 class="v-t">{v.t}</h3>
+                <p class="v-d">{v.d}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- HOW WE WORK -->
+  <section class="section section--sand">
+    <div class="container work-grid">
+      <div class="work-media frame" data-reveal="mask">
+        <Photo photo="cockpit" lang={lang} sizes="(max-width: 900px) 92vw, 36vw" widths={[480, 720]} class="cover" />
+      </div>
+      <div>
+        <p class="label label--rule" data-reveal>{C.workLabel}</p>
+        <ol role="list" class="work">
+          {
+            C.work.map((w, i) => (
+              <li data-reveal>
+                <span class="w-num">{String(i + 1).padStart(2, '0')}</span>
+                <h3 class="w-t">{w.t}</h3>
+                <p class="w-d">{w.d}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLIENTS -->
+  <section class="section section--light">
+    <div class="container">
+      <p class="label label--rule" data-reveal>{C.clientsLabel}</p>
+      <ul role="list" class="clients">
+        {
+          C.clients.map((c, i) => (
+            <li data-reveal style={`--reveal-delay:${i * 0.08}s`}>
+              <h3 class="c-t">{c.t}</h3>
+              <p class="c-d">{c.d}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- PLACE -->
+  <section class="section section--navy">
+    <div class="container place-grid">
+      <div class="place-copy" data-reveal>
+        <p class="label label--rule">{C.areasLabel}</p>
+        <p class="place-text">{C.areasText}</p>
+        <ul role="list" class="place-list">
+          {SERVICE_AREAS.map((a) => <li>{a.name}{a.detail && <span>{a.detail}</span>}</li>)}
+        </ul>
+      </div>
+      <FilmReel lang={lang} films={['arrival', 'horizon']} />
+    </div>
+  </section>
+
+  <CtaBand lang={lang} photo="stern" eyebrow={s.cta.quote} title={C.ctaTitle} text={C.ctaText} placement="about_cta" />
+</BaseLayout>
+
+<style>
+  h2 em {
+    color: var(--bronze);
+  }
+  .section--dark h2 em {
+    color: var(--gold-soft);
+  }
+  .man-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(2.5rem, 7vw, 7rem);
+    align-items: end;
+  }
+  .man-title {
+    margin-top: 1.5rem;
+    font-size: var(--fs-h1);
+    line-height: 1.02;
+  }
+  .man-title em {
+    display: block;
+  }
+  .man-body .lead {
+    color: var(--ink);
+  }
+
+  .ab-head {
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+  .ab-head h2 {
+    margin-top: 1.5rem;
+    max-width: 18ch;
+  }
+  .values {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 clamp(2rem, 6vw, 6rem);
+    margin: 0;
+    padding: 0;
+  }
+  .values li {
+    display: grid;
+    grid-template-columns: clamp(4rem, 8vw, 7rem) 1fr;
+    gap: 1rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--line-dark);
+  }
+  .v-num {
+    font-family: var(--font-serif);
+    font-size: clamp(2.5rem, 4vw, 3.75rem);
+    line-height: 1;
+    color: rgba(212, 178, 118, 0.55);
+  }
+  .v-t {
+    font-size: clamp(1.5rem, 1.25rem + 0.7vw, 2rem);
+  }
+  .v-d {
+    margin-top: 0.6rem;
+    color: var(--on-dark-soft);
+  }
+
+  .work-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(2.5rem, 7vw, 7rem);
+    align-items: center;
+  }
+  .work-media {
+    aspect-ratio: 3 / 4;
+  }
+  .work-media :global(img) {
+    position: absolute;
+    inset: 0;
+  }
+  .work {
+    margin: 2rem 0 0;
+    padding: 0;
+  }
+  .work li {
+    padding: 2rem 0;
+    border-bottom: 1px solid rgba(236, 211, 160, 0.16);
+  }
+  .w-num {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--bronze);
+  }
+  .w-t {
+    margin-top: 0.6rem;
+    font-size: clamp(2rem, 1.5rem + 1.6vw, 3rem);
+  }
+  .w-d {
+    margin-top: 0.6rem;
+    max-width: 34rem;
+    color: var(--ink-soft);
+  }
+
+  .clients {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 3rem);
+    margin: 2.5rem 0 0;
+    padding: 0;
+  }
+  .clients li {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--gold);
+  }
+  .c-t {
+    font-size: clamp(1.5rem, 1.25rem + 0.7vw, 2rem);
+  }
+  .c-d {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  .place-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(2.5rem, 7vw, 7rem);
+    align-items: center;
+  }
+  .place-copy .label {
+    color: var(--gold);
+  }
+  .place-text {
+    margin-top: 1.5rem;
+    color: var(--on-dark-soft);
+  }
+  .place-list {
+    margin: 1.5rem 0 0;
+    padding: 0;
+  }
+  .place-list li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--line-dark);
+    font-family: var(--font-serif);
+    font-size: clamp(1.9rem, 1.4rem + 1.6vw, 2.9rem);
+    line-height: 1.1;
+  }
+  .place-list span {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+  }
+  .place-grid :global(.reel-caption span) {
+    color: var(--gold);
+  }
+
+  @media (max-width: 1000px) {
+    .clients {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 900px) {
+    .man-grid,
+    .work-grid,
+    .place-grid,
+    .values {
+      grid-template-columns: 1fr;
+    }
+    .work-media {
+      aspect-ratio: 4 / 3;
+    }
+  }
+  @media (max-width: 560px) {
+    .clients {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,91 @@
+---
+/** WhatsApp / Viber / Call buttons — every link comes from src/config/site.ts. */
+import Icon from './Icon.astro';
+import { CONTACT, LINKS } from '@/config/site';
+import { t } from '@/i18n/ui';
+import type { Locale } from '@/i18n/routes';
+
+interface Props {
+  lang: Locale;
+  /** Analytics label for where the buttons are placed. */
+  placement: string;
+  tone?: 'dark' | 'light';
+  layout?: 'row' | 'stack';
+  showNumber?: boolean;
+}
+const { lang, placement, tone = 'dark', layout = 'row', showNumber = false } = Astro.props;
+const s = t(lang);
+---
+
+<div class:list={['contact-options', `contact-options--${tone}`, `contact-options--${layout}`]}>
+  <a class="co-item" href={LINKS.whatsapp} target="_blank" rel="noopener" data-track="whatsapp_click" data-track-label={placement}>
+    <Icon name="whatsapp" size={20} />
+    <span>{s.cta.viaWhatsapp}</span>
+  </a>
+  <a class="co-item" href={LINKS.viber} data-track="viber_click" data-track-label={placement}>
+    <Icon name="viber" size={20} />
+    <span>{s.cta.viaViber}</span>
+  </a>
+  <a class="co-item" href={LINKS.tel} data-track="phone_click" data-track-label={placement}>
+    <Icon name="phone" size={20} />
+    <span>{showNumber ? CONTACT.phoneDisplay : s.cta.callUs}</span>
+  </a>
+</div>
+
+<style>
+  .contact-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border: 1px solid var(--co-line);
+  }
+  .contact-options--dark {
+    --co-line: var(--line-dark);
+    --co-fg: var(--on-dark);
+    --co-icon: var(--gold);
+    --co-hover: rgba(212, 178, 118, 0.1);
+  }
+  .contact-options--light {
+    --co-line: var(--line-light);
+    --co-fg: var(--ink);
+    --co-icon: var(--gold);
+    --co-hover: rgba(30, 48, 70, 0.06);
+  }
+  .contact-options--stack {
+    grid-template-columns: 1fr;
+  }
+  .co-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-height: 3.6rem;
+    padding: 0.9rem 1.25rem;
+    color: var(--co-fg);
+    font-size: 0.8rem;
+    font-weight: 450;
+    letter-spacing: 0.08em;
+    transition: background-color 0.3s var(--ease);
+  }
+  .co-item + .co-item {
+    border-left: 1px solid var(--co-line);
+  }
+  .contact-options--stack .co-item + .co-item {
+    border-left: 0;
+    border-top: 1px solid var(--co-line);
+  }
+  .co-item :global(svg) {
+    flex: none;
+    color: var(--co-icon);
+  }
+  .co-item:hover {
+    background: var(--co-hover);
+  }
+  @media (max-width: 700px) {
+    .contact-options {
+      grid-template-columns: 1fr;
+    }
+    .co-item + .co-item {
+      border-left: 0;
+      border-top: 1px solid var(--co-line);
+    }
+  }
+</style>

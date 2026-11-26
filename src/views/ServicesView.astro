@@ -1,0 +1,341 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Photo from '@/components/Photo.astro';
+import Icon from '@/components/Icon.astro';
+import FilmReel from '@/components/FilmReel.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { SERVICE_LIST } from '@/content/services';
+import { PHOTOS } from '@/content/media';
+import { ogImage } from '@/lib/images';
+import { breadcrumbSchema } from '@/lib/schema';
+import { url, type Locale } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const s = t(lang);
+
+const C = {
+  en: {
+    seoTitle: 'Yacht Services in Montenegro — Tivat, Kotor, Budva | DOVERO GROUP',
+    seoDesc:
+      'All DOVERO GROUP yacht services in one place: detailing and polishing, fiberglass and gelcoat repairs, maintenance, winter storage and yacht charter in Montenegro.',
+    eyebrow: 'Our services',
+    h1: 'Yacht services in Montenegro',
+    lead: 'Five services built around one idea: a yacht that is looked after properly, all year round. Choose a single job or combine them into a plan that follows your season.',
+    includes: 'Includes',
+    seasonLabel: 'All year',
+    seasonTitle: ['A year with', 'your yacht.'],
+    seasonText: 'Most owners don’t need everything at once. This is how our services typically fit into the yachting year in the Bay of Kotor.',
+    seasons: [
+      { n: 'Spring', t: 'Preparation', d: 'Cleaning, polishing and repairs so the yacht is ready for the first days of the season.', k: ['detailing', 'repairs'] },
+      { n: 'Summer', t: 'On the water', d: 'Regular care between trips — and charters for guests who want to enjoy the coast.', k: ['maintenance', 'charter'] },
+      { n: 'Autumn', t: 'Season’s end', d: 'A thorough clean and careful preparation before the yacht is laid up.', k: ['maintenance', 'detailing'] },
+      { n: 'Winter', t: 'Storage & works', d: 'Indoor or fenced outdoor storage under video surveillance, with time for bigger jobs.', k: ['storage', 'repairs'] },
+    ],
+    filmLabel: 'From the bay',
+    ctaTitle: 'Not sure where to start?',
+    ctaText: 'Describe your yacht and what you have in mind. We will recommend the right service — or tell you honestly if you don’t need one yet.',
+  },
+  me: {
+    seoTitle: 'Usluge za jahte u Crnoj Gori — Tivat, Kotor, Budva | DOVERO GROUP',
+    seoDesc:
+      'Sve usluge kompanije DOVERO GROUP na jednom mjestu: detailing i poliranje, popravke fiberglasa i gelcoata, održavanje, zimski smještaj i najam jahti u Crnoj Gori.',
+    eyebrow: 'Naše usluge',
+    h1: 'Usluge za jahte u Crnoj Gori',
+    lead: 'Pet usluga zasnovanih na jednoj ideji: jahta o kojoj se pravilno brine tokom cijele godine. Izaberite pojedinačan posao ili ih spojite u plan koji prati vašu sezonu.',
+    includes: 'Uključuje',
+    seasonLabel: 'Cijele godine',
+    seasonTitle: ['Godina sa', 'vašom jahtom.'],
+    seasonText: 'Većini vlasnika nije potrebno sve odjednom. Ovako se naše usluge najčešće uklapaju u nautičku godinu u Boki Kotorskoj.',
+    seasons: [
+      { n: 'Proljeće', t: 'Priprema', d: 'Čišćenje, poliranje i popravke kako bi jahta bila spremna za prve dane sezone.', k: ['detailing', 'repairs'] },
+      { n: 'Ljeto', t: 'Na moru', d: 'Redovna njega između izlazaka — i čarteri za goste koji žele da uživaju u obali.', k: ['maintenance', 'charter'] },
+      { n: 'Jesen', t: 'Kraj sezone', d: 'Temeljno čišćenje i pažljiva priprema prije zimovanja jahte.', k: ['maintenance', 'detailing'] },
+      { n: 'Zima', t: 'Smještaj i radovi', d: 'Smještaj u hali ili na ograđenom placu pod video nadzorom, uz vrijeme za veće radove.', k: ['storage', 'repairs'] },
+    ],
+    filmLabel: 'Iz Boke',
+    ctaTitle: 'Niste sigurni odakle da počnete?',
+    ctaText: 'Opišite nam jahtu i šta imate na umu. Preporučićemo pravu uslugu — ili vam iskreno reći ako vam još nije potrebna.',
+  },
+}[lang];
+
+const crumbs = [
+  { name: s.nav.home, route: 'home' as const },
+  { name: s.nav.services, route: 'services' as const },
+];
+const og = await ogImage(PHOTOS.flybridgeHarbour.src);
+const byKey = Object.fromEntries(SERVICE_LIST.map((x) => [x.key, x]));
+---
+
+<BaseLayout
+  lang={lang}
+  route="services"
+  title={C.seoTitle}
+  description={C.seoDesc}
+  ogImage={{ ...og, alt: PHOTOS.flybridgeHarbour.alt[lang] }}
+  jsonLd={[
+    breadcrumbSchema(crumbs, lang),
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      itemListElement: SERVICE_LIST.map((svc, i) => ({ '@type': 'ListItem', position: i + 1, name: svc.name[lang], url: new URL(url(svc.route, lang), Astro.site).toString() })),
+    },
+  ]}
+>
+  <PageHero lang={lang} photo="flybridgeHarbour" eyebrow={C.eyebrow} title={C.h1} lead={C.lead} breadcrumbs={crumbs} />
+
+  <section class="section section--light">
+    <div class="container">
+      <ol role="list" class="rows">
+        {
+          SERVICE_LIST.map((svc, i) => (
+            <li class:list={['row', { 'row--flip': i % 2 === 1 }]}>
+              <a class="row-media frame" href={url(svc.route, lang)} tabindex="-1" aria-hidden="true" data-reveal="mask">
+                <Photo photo={svc.heroPhoto} lang={lang} sizes="(max-width: 900px) 92vw, 42vw" widths={[480, 828, 1080]} class="cover row-img" />
+              </a>
+              <div class="row-copy" data-reveal>
+                <span class="row-num">{svc.number}</span>
+                <h2 class="row-title">
+                  <a href={url(svc.route, lang)}>{svc.name[lang]}</a>
+                </h2>
+                <p class="row-sum">{svc.summary[lang]}</p>
+                <p class="row-inc">{C.includes}</p>
+                <ul role="list" class="row-list">
+                  {svc.scope[lang].items.slice(0, 4).map((it) => <li>{it.title}</li>)}
+                </ul>
+                <a class="btn btn--outline-dark row-btn" href={url(svc.route, lang)}>
+                  {s.cta.discover}
+                  <span class="visually-hidden"> — {svc.name[lang]}</span>
+                  <Icon name="arrow" size={10} />
+                </a>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container">
+      <header class="sea-head" data-reveal>
+        <div>
+          <p class="label label--rule">{C.seasonLabel}</p>
+          <h2>{C.seasonTitle[0]} <em>{C.seasonTitle[1]}</em></h2>
+        </div>
+        <p class="muted">{C.seasonText}</p>
+      </header>
+      <ol role="list" class="seasons">
+        {
+          C.seasons.map((se, i) => (
+            <li data-reveal style={`--reveal-delay:${i * 0.1}s`}>
+              <p class="sea-n">{se.n}</p>
+              <h3 class="sea-t">{se.t}</h3>
+              <p class="sea-d">{se.d}</p>
+              <ul role="list" class="sea-links">
+                {se.k.map((k) => (
+                  <li>
+                    <a href={url(byKey[k].route, lang)}>
+                      {byKey[k].name[lang]}
+                      <Icon name="arrow" size={8} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--sand">
+    <div class="container film-row">
+      <p class="label label--rule" data-reveal>{C.filmLabel}</p>
+      <FilmReel lang={lang} films={['marina', 'openWater', 'horizon']} />
+    </div>
+  </section>
+
+  <CtaBand lang={lang} photo="bow" eyebrow={s.cta.quote} title={C.ctaTitle} text={C.ctaText} placement="services_cta" />
+</BaseLayout>
+
+<style>
+  .rows {
+    display: grid;
+    gap: clamp(5rem, 10vw, 9rem);
+    margin: 0;
+    padding: 0;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(2.5rem, 7vw, 7.5rem);
+    align-items: center;
+  }
+  .row--flip .row-media {
+    order: 2;
+  }
+  .row-media {
+    display: block;
+    aspect-ratio: 4 / 5;
+  }
+  .row-media :global(.row-img) {
+    position: absolute;
+    inset: 0;
+    transition: transform 1.4s var(--ease-out);
+  }
+  .row-media:hover :global(.row-img) {
+    transform: scale(1.04);
+  }
+  .row-num {
+    font-family: var(--font-serif);
+    font-size: clamp(3.5rem, 6vw, 5.5rem);
+    line-height: 1;
+    color: var(--gold);
+  }
+  .row-title {
+    margin-top: 1rem;
+    font-size: var(--fs-h2);
+  }
+  .row-title a {
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: background-size 0.6s var(--ease-out);
+  }
+  .row-title a:hover {
+    background-size: 100% 1px;
+  }
+  .row-sum {
+    margin-top: 1.25rem;
+    max-width: 32rem;
+    font-size: var(--fs-lead);
+    color: var(--ink-soft);
+  }
+  .row-inc {
+    margin-top: 2rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--bronze);
+  }
+  .row-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 2rem;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    max-width: 34rem;
+  }
+  .row-list li {
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--line-light);
+    font-size: 0.95rem;
+  }
+  .row-btn {
+    margin-top: 2.25rem;
+  }
+
+  .sea-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: 2rem clamp(2rem, 6vw, 6rem);
+    align-items: end;
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+  .sea-head h2 {
+    margin-top: 1.5rem;
+  }
+  .sea-head h2 em {
+    color: var(--gold-soft);
+  }
+  .seasons {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line-dark);
+  }
+  .seasons > li {
+    padding: 2rem clamp(1rem, 2vw, 2rem) 0 0;
+  }
+  .seasons > li + li {
+    padding-left: clamp(1rem, 2vw, 2rem);
+    border-left: 1px solid var(--line-dark);
+  }
+  .sea-n {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .sea-t {
+    margin-top: 1rem;
+    font-size: clamp(1.6rem, 1.3rem + 0.9vw, 2.2rem);
+  }
+  .sea-d {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--on-dark-soft);
+  }
+  .sea-links {
+    margin: 1.5rem 0 0;
+    padding: 0;
+  }
+  .sea-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.3rem 0;
+    font-size: 0.85rem;
+    color: var(--gold-soft);
+  }
+  .sea-links a:hover {
+    color: var(--ivory);
+  }
+  .film-row .label {
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 1000px) {
+    .seasons {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .seasons > li:nth-child(3) {
+      border-left: 0;
+      padding-left: 0;
+    }
+    .seasons > li {
+      padding-bottom: 2.5rem;
+    }
+  }
+  @media (max-width: 900px) {
+    .row,
+    .sea-head {
+      grid-template-columns: 1fr;
+    }
+    .row--flip .row-media {
+      order: 0;
+    }
+    .row-media {
+      aspect-ratio: 4 / 3;
+    }
+  }
+  @media (max-width: 560px) {
+    .seasons {
+      grid-template-columns: 1fr;
+    }
+    .seasons > li + li {
+      border-left: 0;
+      padding-left: 0;
+      border-top: 1px solid var(--line-dark);
+    }
+    .row-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

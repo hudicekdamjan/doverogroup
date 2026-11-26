@@ -1,0 +1,91 @@
+---
+import Photo from './Photo.astro';
+import Icon from './Icon.astro';
+import { SERVICES } from '@/content/services';
+import { url, type Locale } from '@/i18n/routes';
+import { t, type ServiceKey } from '@/i18n/ui';
+
+interface Props {
+  lang: Locale;
+  keys: ServiceKey[];
+}
+const { lang, keys } = Astro.props;
+const s = t(lang);
+---
+
+<ul role="list" class="related">
+  {
+    keys.map((k, i) => {
+      const svc = SERVICES[k];
+      return (
+        <li data-reveal style={`--reveal-delay:${i * 0.1}s`}>
+          <a class="rel-card" href={url(svc.route, lang)}>
+            <div class="rel-media frame">
+              <Photo photo={svc.heroPhoto} lang={lang} sizes="(max-width: 760px) 92vw, 30vw" widths={[480, 720, 960]} class="cover rel-img" />
+            </div>
+            <span class="rel-num">{svc.number}</span>
+            <h3 class="rel-name">{svc.name[lang]}</h3>
+            <p class="rel-sum">{svc.summary[lang]}</p>
+            <span class="link-arrow rel-more">
+              {s.cta.learnMore}
+              <Icon name="arrow" size={10} />
+            </span>
+          </a>
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style>
+  .related {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 3rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .rel-card {
+    display: block;
+  }
+  .rel-media {
+    aspect-ratio: 4 / 5;
+  }
+  .rel-media :global(.rel-img) {
+    position: absolute;
+    inset: 0;
+    transition: transform 1.2s var(--ease-out);
+  }
+  .rel-card:hover :global(.rel-img) {
+    transform: scale(1.05);
+  }
+  .rel-num {
+    display: block;
+    margin-top: 1.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--bronze);
+  }
+  .rel-name {
+    margin-top: 0.5rem;
+    font-size: clamp(1.5rem, 1.2rem + 0.8vw, 2rem);
+  }
+  .rel-sum {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+  .rel-more {
+    margin-top: 1.25rem;
+    color: var(--gold);
+  }
+  @media (max-width: 900px) {
+    .related {
+      grid-template-columns: 1fr;
+    }
+    .rel-media {
+      aspect-ratio: 16 / 10;
+    }
+  }
+</style>

@@ -1,0 +1,576 @@
+---
+import Icon from './Icon.astro';
+import { t } from '@/i18n/ui';
+import { LOCALE_META, type Locale } from '@/i18n/routes';
+import { CONTACT, LINKS, CONTACT_EMAIL, INQUIRY_ENDPOINT } from '@/config/site';
+import { SERVICE_OPTIONS, CONTACT_METHODS, LIMITS } from '@/lib/inquiry';
+
+interface Props {
+  lang: Locale;
+  id?: string;
+  /** Show the heading + intro inside the component. */
+  showIntro?: boolean;
+}
+const { lang, id = 'inquiry', showIntro = true } = Astro.props;
+const s = t(lang);
+const f = s.form;
+
+const config = {
+  lang,
+  locale: LOCALE_META[lang].htmlLang,
+  labels: f.wa,
+  errors: f.errors,
+  serviceNames: f.services,
+  methodNames: f.methods,
+  copied: f.ready.copied,
+  copy: f.ready.copy,
+  // Email delivery activates only when BOTH are configured (see README).
+  emailEnabled: Boolean(CONTACT_EMAIL && INQUIRY_ENDPOINT),
+  endpoint: INQUIRY_ENDPOINT,
+};
+---
+
+<div class="inquiry" id={id} data-inquiry data-config={JSON.stringify(config)}>
+  {
+    showIntro && (
+      <header class="inquiry-head">
+        <h2 class="h2 inquiry-title">{f.heading}</h2>
+        <p class="inquiry-intro">{f.intro}</p>
+      </header>
+    )
+  }
+
+  <form class="inquiry-form" novalidate data-inquiry-form aria-describedby={`${id}-privacy`}>
+    <div class="form-summary" role="alert" tabindex="-1" data-form-summary hidden>
+      <p>{f.errors.summary}</p>
+      <ul role="list" data-form-summary-list></ul>
+    </div>
+
+    <!-- Honeypot: hidden from people, tempting for bots. -->
+    <div class="hp" aria-hidden="true">
+      <label for={`${id}-company`}>Company website</label>
+      <input id={`${id}-company`} name="company_website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <fieldset class="fs">
+      <legend class="label">01 — {lang === 'en' ? 'Your details' : 'Vaši podaci'}</legend>
+      <div class="grid-2">
+        <div class="field" data-field="name">
+          <label for={`${id}-name`}>{f.fields.name} <span class="req" aria-hidden="true">*</span><span class="visually-hidden">({f.required})</span></label>
+          <input id={`${id}-name`} name="name" type="text" autocomplete="name" required maxlength={LIMITS.name} placeholder={f.placeholders.name} aria-describedby={`${id}-name-err`} />
+          <p class="field-error" id={`${id}-name-err`} data-error-for="name" hidden>{f.errors.name}</p>
+        </div>
+        <div class="field" data-field="phone">
+          <label for={`${id}-phone`}>{f.fields.phone} <span class="req" aria-hidden="true">*</span><span class="visually-hidden">({f.required})</span></label>
+          <input id={`${id}-phone`} name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength={LIMITS.phone} placeholder={f.placeholders.phone} aria-describedby={`${id}-phone-err`} />
+          <p class="field-error" id={`${id}-phone-err`} data-error-for="phone" hidden>{f.errors.phone}</p>
+        </div>
+      </div>
+
+      <div class="field" data-field="method">
+        <fieldset class="methods" aria-describedby={`${id}-method-err`}>
+          <legend class="field-legend">{f.fields.method} <span class="req" aria-hidden="true">*</span><span class="visually-hidden">({f.required})</span></legend>
+          <div class="method-options">
+            {
+              CONTACT_METHODS.map((m, i) => (
+                <label class="method">
+                  <input type="radio" name="method" value={m} checked={i === 0} required />
+                  <span>
+                    <Icon name={m === 'phone' ? 'phone' : m} size={16} />
+                    {f.methods[m]}
+                  </span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+        <p class="field-error" id={`${id}-method-err`} data-error-for="method" hidden>{f.errors.method}</p>
+      </div>
+
+      <div class="field" data-field="email">
+        <label for={`${id}-email`}>{f.fields.email} <span class="opt">{f.optional}</span></label>
+        <input id={`${id}-email`} name="email" type="email" autocomplete="email" maxlength={LIMITS.email} placeholder={f.placeholders.email} aria-describedby={`${id}-email-err`} />
+        <p class="field-error" id={`${id}-email-err`} data-error-for="email" hidden>{f.errors.email}</p>
+      </div>
+    </fieldset>
+
+    <fieldset class="fs">
+      <legend class="label">02 — {lang === 'en' ? 'Your yacht' : 'Vaša jahta'}</legend>
+      <div class="grid-3">
+        <div class="field">
+          <label for={`${id}-yname`}>{f.fields.yachtName} <span class="opt">{f.optional}</span></label>
+          <input id={`${id}-yname`} name="yachtName" type="text" maxlength={LIMITS.yachtName} placeholder={f.placeholders.yachtName} />
+        </div>
+        <div class="field">
+          <label for={`${id}-ytype`}>{f.fields.yachtType} <span class="opt">{f.optional}</span></label>
+          <input id={`${id}-ytype`} name="yachtType" type="text" maxlength={LIMITS.yachtType} placeholder={f.placeholders.yachtType} />
+        </div>
+        <div class="field">
+          <label for={`${id}-ylen`}>{f.fields.yachtLength} <span class="opt">{f.optional}</span></label>
+          <input id={`${id}-ylen`} name="yachtLength" type="text" maxlength={LIMITS.yachtLength} placeholder={f.placeholders.yachtLength} />
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="fs">
+      <legend class="label">03 — {lang === 'en' ? 'Your request' : 'Vaš zahtjev'}</legend>
+      <div class="grid-2">
+        <div class="field" data-field="service">
+          <label for={`${id}-service`}>{f.fields.service} <span class="req" aria-hidden="true">*</span><span class="visually-hidden">({f.required})</span></label>
+          <div class="select">
+            <select id={`${id}-service`} name="service" required aria-describedby={`${id}-service-err`}>
+              <option value="">{f.placeholders.service}</option>
+              {SERVICE_OPTIONS.map((o) => <option value={o}>{f.services[o]}</option>)}
+            </select>
+            <Icon name="chevron" size={16} />
+          </div>
+          <p class="field-error" id={`${id}-service-err`} data-error-for="service" hidden>{f.errors.service}</p>
+        </div>
+        <div class="field" data-field="date">
+          <label for={`${id}-date`}>{f.fields.date} <span class="opt">{f.optional}</span></label>
+          <input id={`${id}-date`} name="date" type="date" aria-describedby={`${id}-date-err`} />
+          <p class="field-error" id={`${id}-date-err`} data-error-for="date" hidden>{f.errors.date}</p>
+        </div>
+      </div>
+      <div class="field" data-field="message">
+        <label for={`${id}-message`}>{f.fields.message} <span class="req" aria-hidden="true">*</span><span class="visually-hidden">({f.required})</span></label>
+        <textarea id={`${id}-message`} name="message" rows="5" required maxlength={LIMITS.message} placeholder={f.placeholders.message} aria-describedby={`${id}-message-err`}></textarea>
+        <p class="field-error" id={`${id}-message-err`} data-error-for="message" hidden>{f.errors.message}</p>
+      </div>
+    </fieldset>
+
+    <div class="form-foot">
+      <p class="privacy" id={`${id}-privacy`}>{f.privacy}</p>
+      <button type="submit" class="btn btn--dark submit" data-track="quote_request" data-track-label="form_submit">
+        <Icon name="whatsapp" size={18} />
+        {f.submit}
+        <Icon name="arrow" size={10} />
+      </button>
+    </div>
+  </form>
+
+  <!-- Step 2: ready to send via WhatsApp -->
+  <div class="inquiry-ready" data-inquiry-ready tabindex="-1" hidden aria-live="polite">
+    <p class="ready-mark"><Icon name="check" size={26} /></p>
+    <p class="h3 ready-title">{f.ready.title}</p>
+    <p class="ready-text">{f.ready.text}</p>
+    <p class="ready-note" data-ready-note>{f.ready.note}</p>
+    <p class="ready-failed" data-email-failed hidden>{f.emailSent.failed}</p>
+
+    <a class="btn btn--dark ready-cta" href={LINKS.whatsapp} target="_blank" rel="noopener" data-wa-continue>
+      <Icon name="whatsapp" size={18} />
+      {f.ready.continue}
+      <Icon name="arrow" size={10} />
+    </a>
+
+    <details class="ready-preview">
+      <summary>{f.ready.preview}</summary>
+      <pre data-message-preview></pre>
+    </details>
+
+    <div class="ready-fallback">
+      <p class="ready-fb-title">{f.ready.fallbackTitle}</p>
+      <p class="ready-fb-text">{f.ready.fallbackText}</p>
+      <div class="ready-fb-actions">
+        <button type="button" class="fb-btn" data-copy-message>
+          <Icon name="copy" size={17} />
+          <span data-copy-label>{f.ready.copy}</span>
+        </button>
+        <a class="fb-btn" href={LINKS.viber} data-track="viber_click" data-track-label="form_fallback"><Icon name="viber" size={17} />Viber</a>
+        <a class="fb-btn" href={LINKS.tel} data-track="phone_click" data-track-label="form_fallback"><Icon name="phone" size={17} />{CONTACT.phoneDisplay}</a>
+      </div>
+    </div>
+
+    <button type="button" class="ready-edit" data-inquiry-edit>← {f.ready.edit}</button>
+  </div>
+
+  <!-- Only used once email delivery is configured -->
+  <div class="inquiry-ready" data-inquiry-sent tabindex="-1" hidden aria-live="polite">
+    <p class="ready-mark"><Icon name="check" size={26} /></p>
+    <p class="h3 ready-title">{f.emailSent.title}</p>
+    <p class="ready-text">{f.emailSent.text}</p>
+  </div>
+</div>
+
+<style>
+  .inquiry {
+    --field-line: rgba(236, 211, 160, 0.32);
+    color: var(--ink);
+  }
+  .inquiry-head {
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+  .inquiry-intro {
+    margin-top: 1rem;
+    max-width: 34rem;
+    color: var(--ink-soft);
+  }
+  .fs {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  .fs + .fs {
+    margin-top: 2.5rem;
+  }
+  .fs > legend {
+    display: flex;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    padding: 0;
+  }
+  .fs > legend::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line-light);
+  }
+  .grid-2,
+  .grid-3 {
+    display: grid;
+    gap: 0 2rem;
+  }
+  .grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .field {
+    position: relative;
+    padding-top: 1.1rem;
+  }
+  .field label,
+  .field-legend {
+    display: block;
+    margin-bottom: 0.2rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding: 0;
+  }
+  .req {
+    color: var(--bronze);
+  }
+  .opt {
+    margin-left: 0.35rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    color: rgba(242, 238, 228, 0.7);
+  }
+  .field input,
+  .field textarea,
+  .field select {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.55rem 0;
+    border: 0;
+    border-bottom: 1px solid var(--field-line);
+    border-radius: 0;
+    background: transparent;
+    font-size: 1.0625rem; /* ≥16px: no iOS zoom */
+    color: var(--ink);
+    transition: border-color 0.3s var(--ease);
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .field textarea {
+    resize: vertical;
+    min-height: 8rem;
+    line-height: 1.6;
+  }
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: rgba(242, 238, 228, 0.55);
+  }
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus {
+    outline: none;
+    border-bottom-color: var(--gold);
+    box-shadow: 0 1px 0 0 var(--gold);
+  }
+  .field input:focus-visible,
+  .field textarea:focus-visible,
+  .field select:focus-visible {
+    outline: none;
+  }
+  .select {
+    position: relative;
+  }
+  .select select {
+    padding-right: 2rem;
+    cursor: pointer;
+  }
+  .select :global(svg) {
+    position: absolute;
+    right: 0.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--gold);
+  }
+  .field input[type='date'] {
+    min-height: 3rem;
+  }
+  .field.has-error input,
+  .field.has-error textarea,
+  .field.has-error select {
+    border-bottom-color: var(--error);
+    box-shadow: 0 1px 0 0 var(--error);
+  }
+  .field-error {
+    margin-top: 0.45rem;
+    font-size: 0.82rem;
+    color: var(--error);
+  }
+  .methods {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .method-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.6rem;
+  }
+  .method {
+    position: relative;
+    cursor: pointer;
+  }
+  .method input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    cursor: pointer;
+  }
+  .method span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.75rem;
+    padding: 0.55rem 1.1rem;
+    border: 1px solid var(--field-line);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 450;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    color: var(--ink);
+    transition:
+      background-color 0.3s var(--ease),
+      border-color 0.3s var(--ease),
+      color 0.3s var(--ease);
+  }
+  .method input:checked + span {
+    background: var(--gold-grad);
+    border-color: transparent;
+    color: #121a24;
+  }
+  .method input:checked + span :global(svg) {
+    color: #121a24;
+  }
+  .method input:focus-visible + span {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+  .form-summary {
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.25rem;
+    border-left: 2px solid var(--error);
+    background: rgba(155, 59, 42, 0.06);
+    color: var(--error);
+    font-size: 0.92rem;
+  }
+  .form-summary:focus {
+    outline: none;
+  }
+  .form-summary ul {
+    margin: 0.35rem 0 0;
+    padding-left: 1.1rem;
+    list-style: disc;
+  }
+  .form-summary a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .form-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem 2rem;
+    margin-top: 2.5rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--line-light);
+  }
+  .privacy {
+    flex: 1 1 18rem;
+    max-width: 30rem;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+  .submit[disabled] {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  /* Ready / sent states */
+  .inquiry-ready {
+    padding: clamp(1.75rem, 4vw, 3rem);
+    background: var(--surface-3);
+    border: 1px solid var(--line-light);
+  }
+  .inquiry-ready:focus {
+    outline: none;
+  }
+  .ready-mark {
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 50%;
+    background: var(--navy-dark);
+    color: var(--gold);
+  }
+  .ready-title {
+    margin-top: 1.5rem;
+  }
+  .ready-text {
+    margin-top: 0.75rem;
+    font-size: var(--fs-lead);
+  }
+  .ready-note {
+    margin-top: 0.5rem;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+  .ready-failed {
+    margin-top: 1rem;
+    color: var(--error);
+    font-size: 0.9rem;
+  }
+  .ready-cta {
+    margin-top: 1.75rem;
+  }
+  .ready-preview {
+    margin-top: 2rem;
+    border-top: 1px solid var(--line-light);
+    padding-top: 1rem;
+  }
+  .ready-preview summary {
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .ready-preview pre {
+    margin: 1rem 0 0;
+    padding: 1.25rem;
+    max-height: 22rem;
+    overflow: auto;
+    background: var(--surface);
+    border: 1px solid var(--line-light);
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .ready-fallback {
+    margin-top: 1.75rem;
+    padding: 1.25rem 1.4rem;
+    background: var(--surface);
+  }
+  .ready-fb-title {
+    font-weight: 500;
+  }
+  .ready-fb-text {
+    margin-top: 0.25rem;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .ready-fb-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+  .fb-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--field-line);
+    background: var(--surface-3);
+    font-size: 0.85rem;
+    transition: border-color 0.3s var(--ease);
+  }
+  .fb-btn:hover {
+    border-color: var(--gold);
+  }
+  .fb-btn :global(svg) {
+    color: var(--gold);
+  }
+  .ready-edit {
+    margin-top: 1.75rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  @media (max-width: 860px) {
+    .grid-3 {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 640px) {
+    .grid-2 {
+      grid-template-columns: 1fr;
+    }
+    .form-foot .submit {
+      width: 100%;
+    }
+    .method-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .method span {
+      justify-content: center;
+      width: 100%;
+      padding-inline: 0.5rem;
+      font-size: 0.8rem;
+    }
+  }
+  @media (max-width: 380px) {
+    .method-options {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  import '@/scripts/inquiry-form';
+</script>

@@ -1,0 +1,398 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import Photo from '@/components/Photo.astro';
+import Icon from '@/components/Icon.astro';
+import Faq from '@/components/Faq.astro';
+import RelatedServices from '@/components/RelatedServices.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import ContactOptions from '@/components/ContactOptions.astro';
+import { PHOTOS } from '@/content/media';
+import { ogImage } from '@/lib/images';
+import { serviceSchema, breadcrumbSchema, faqSchema } from '@/lib/schema';
+import { url, type Locale } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+import { SERVICE_AREAS, whatsappUrl } from '@/config/site';
+import type { ServiceContent } from '@/content/services';
+
+interface Props {
+  lang: Locale;
+  service: ServiceContent;
+}
+const { lang, service: svc } = Astro.props;
+const s = t(lang);
+
+const crumbs = [
+  { name: s.nav.home, route: 'home' as const },
+  { name: s.nav.services, route: 'services' as const },
+  { name: svc.name[lang], route: svc.route },
+];
+const og = await ogImage(PHOTOS[svc.heroPhoto].src);
+const quoteHref = `${url('contact', lang)}?service=${svc.key}#inquiry`;
+const waHref = whatsappUrl(
+  lang === 'en' ? `Hello DOVERO GROUP, I am interested in: ${svc.name.en}.` : `Poštovani DOVERO GROUP, zanima me usluga: ${svc.name.me}.`,
+);
+
+const L = {
+  en: { overview: 'Overview', scope: 'Scope', process: 'Process', areas: 'Available across', faq: 'Questions', faqTitle: 'Good to know', related: 'Related services', relatedTitle: 'Often combined with', contact: 'Talk to us directly', ctaTitle: 'Let’s take care of your yacht.', ctaText: 'Tell us about your yacht and what it needs. We will come back to you with the next steps.' },
+  me: { overview: 'Pregled', scope: 'Obim', process: 'Proces', areas: 'Dostupno u mjestima', faq: 'Pitanja', faqTitle: 'Dobro je znati', related: 'Povezane usluge', relatedTitle: 'Često se kombinuje sa', contact: 'Javite nam se direktno', ctaTitle: 'Pobrinimo se za vašu jahtu.', ctaText: 'Opišite nam jahtu i šta joj je potrebno. Javićemo vam se sa sljedećim koracima.' },
+}[lang];
+
+const ov = svc.overview[lang];
+const scope = svc.scope[lang];
+const proc = svc.process[lang];
+const hl = svc.highlight[lang];
+---
+
+<BaseLayout
+  lang={lang}
+  route={svc.route}
+  title={svc.seo[lang].title}
+  description={svc.seo[lang].description}
+  ogImage={{ ...og, alt: PHOTOS[svc.heroPhoto].alt[lang] }}
+  jsonLd={[serviceSchema(svc, lang), breadcrumbSchema(crumbs, lang), faqSchema(svc.faq[lang])]}
+>
+  <PageHero lang={lang} photo={svc.heroPhoto} eyebrow={svc.eyebrow[lang]} title={svc.h1[lang]} lead={svc.lead[lang]} breadcrumbs={crumbs} index={svc.number}>
+    <div class="hero-actions">
+      <a class="btn" href={quoteHref} data-track="quote_request" data-track-label={`${svc.key}_hero`}>{s.cta.quote}<Icon name="arrow" size={10} /></a>
+      <a class="btn btn--ghost" href={waHref} target="_blank" rel="noopener" data-track="whatsapp_click" data-track-label={`${svc.key}_hero`}><Icon name="whatsapp" size={18} />{s.cta.whatsapp}</a>
+    </div>
+  </PageHero>
+
+  <!-- OVERVIEW -->
+  <section class="section section--light">
+    <div class="container ov-grid">
+      <div class="ov-copy" data-reveal>
+        <p class="label label--rule">{L.overview}</p>
+        <h2 class="ov-title">{ov.heading}</h2>
+        <div class="prose ov-text">
+          {ov.paragraphs.map((p, i) => <p class={i === 0 ? 'lead' : 'muted'}>{p}</p>)}
+        </div>
+        <aside class="ov-aside">
+          <p class="ov-aside-t">{hl.heading}</p>
+          <p class="ov-aside-d">{hl.text}</p>
+        </aside>
+      </div>
+      <figure class="ov-media" data-reveal="mask">
+        <div class="frame ov-frame">
+          <Photo photo={svc.detailPhoto} lang={lang} sizes="(max-width: 900px) 92vw, 38vw" widths={[480, 720, 960, 1080]} class="cover" />
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- SCOPE -->
+  <section class="section section--dark">
+    <div class="container">
+      <header class="sv-head" data-reveal>
+        <p class="label label--rule">{L.scope}</p>
+        <h2>{scope.heading}</h2>
+      </header>
+      <ol role="list" class="scope">
+        {
+          scope.items.map((item, i) => (
+            <li data-reveal style={`--reveal-delay:${(i % 3) * 0.08}s`}>
+              <span class="scope-num">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="scope-t">{item.title}</h3>
+              <p class="scope-d">{item.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section section--sand">
+    <div class="container">
+      <header class="sv-head" data-reveal>
+        <p class="label label--rule">{L.process}</p>
+        <h2>{proc.heading}</h2>
+      </header>
+      <ol role="list" class="steps">
+        {
+          proc.steps.map((step, i) => (
+            <li data-reveal style={`--reveal-delay:${i * 0.1}s`}>
+              <span class="step-dot" aria-hidden="true" />
+              <span class="step-num">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="step-t">{step.title}</h3>
+              <p class="step-d">{step.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- CONTACT STRIP + AREAS -->
+  <section class="section section--sm section--navy">
+    <div class="container strip">
+      <div data-reveal>
+        <p class="label label--rule">{L.areas}</p>
+        <p class="strip-areas">
+          {SERVICE_AREAS.map((a, i) => <span>{a.name}{a.detail && ` · ${a.detail}`}{i < SERVICE_AREAS.length - 1 && <span class="sep" aria-hidden="true">/</span>}</span>)}
+        </p>
+      </div>
+      <div class="strip-contact" data-reveal>
+        <p class="strip-t">{L.contact}</p>
+        <ContactOptions lang={lang} placement={`${svc.key}_strip`} tone="dark" layout="stack" showNumber />
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section--light">
+    <div class="container faq-grid">
+      <header data-reveal>
+        <p class="label label--rule">{L.faq}</p>
+        <h2 class="faq-title">{L.faqTitle}</h2>
+      </header>
+      <div data-reveal>
+        <Faq items={svc.faq[lang]} />
+      </div>
+    </div>
+  </section>
+
+  <!-- RELATED -->
+  <section class="section section--sand">
+    <div class="container">
+      <header class="sv-head sv-head--row" data-reveal>
+        <div>
+          <p class="label label--rule">{L.related}</p>
+          <h2>{L.relatedTitle}</h2>
+        </div>
+        <a class="link-arrow" href={url('services', lang)}>{s.nav.allServices}<Icon name="arrow" size={10} /></a>
+      </header>
+      <RelatedServices lang={lang} keys={svc.related} />
+    </div>
+  </section>
+
+  <CtaBand lang={lang} photo={svc.key === 'charter' ? 'dayCruiser' : 'convoy'} eyebrow={s.cta.quote} title={L.ctaTitle} text={L.ctaText} service={svc.key} placement={`${svc.key}_cta`} />
+</BaseLayout>
+
+<style>
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .sv-head {
+    margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+  }
+  .sv-head h2 {
+    margin-top: 1.5rem;
+    max-width: 18ch;
+  }
+  .sv-head--row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+  .sv-head--row .link-arrow {
+    color: var(--gold);
+  }
+
+  /* Overview */
+  .ov-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(2.5rem, 7vw, 7.5rem);
+    align-items: start;
+  }
+  .ov-title {
+    margin-top: 1.5rem;
+    max-width: 16ch;
+  }
+  .ov-text {
+    margin-top: 2rem;
+    max-width: 40rem;
+  }
+  .ov-text .lead {
+    color: var(--ink);
+  }
+  .ov-aside {
+    margin-top: 3rem;
+    padding: 1.75rem 0 0 1.75rem;
+    border-left: 1px solid var(--gold);
+    max-width: 34rem;
+  }
+  .ov-aside-t {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    line-height: 1.2;
+  }
+  .ov-aside-d {
+    margin-top: 0.6rem;
+    color: var(--ink-soft);
+  }
+  .ov-media {
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+  }
+  .ov-frame {
+    aspect-ratio: 4 / 5;
+  }
+  .ov-frame :global(img) {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Scope */
+  .scope {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0 clamp(2rem, 4vw, 4rem);
+    margin: 0;
+    padding: 0;
+  }
+  .scope li {
+    padding: 2rem 0 2.5rem;
+    border-top: 1px solid var(--line-dark);
+  }
+  .scope-num {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+  }
+  .scope-t {
+    margin-top: 1rem;
+    font-size: clamp(1.45rem, 1.2rem + 0.7vw, 1.85rem);
+  }
+  .scope-d {
+    margin-top: 0.75rem;
+    color: var(--on-dark-soft);
+    font-size: 0.97rem;
+  }
+
+  /* Process */
+  .steps {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 3rem);
+    margin: 0;
+    padding: 0;
+  }
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 0.4rem;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(236, 211, 160, 0.16);
+  }
+  .steps li {
+    position: relative;
+    padding-top: 2.5rem;
+  }
+  .step-dot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--gold);
+  }
+  .steps li:first-child .step-dot {
+    background: var(--navy);
+  }
+  .step-num {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--bronze);
+  }
+  .step-t {
+    margin-top: 0.75rem;
+    font-size: clamp(1.5rem, 1.25rem + 0.7vw, 1.95rem);
+  }
+  .step-d {
+    margin-top: 0.75rem;
+    color: var(--ink-soft);
+    font-size: 0.97rem;
+  }
+
+  /* Strip */
+  .strip {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .strip .label {
+    color: var(--gold);
+  }
+  .strip-areas {
+    margin-top: 1.5rem;
+    font-family: var(--font-serif);
+    font-size: clamp(1.9rem, 1.3rem + 2vw, 3.25rem);
+    line-height: 1.2;
+  }
+  .strip-areas > span {
+    white-space: nowrap;
+  }
+  .strip-areas .sep {
+    margin-inline: 0.6em;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+  .strip-t {
+    margin-bottom: 1rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* FAQ */
+  .faq-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
+  }
+  .faq-title {
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 1000px) {
+    .scope {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 3rem;
+    }
+    .steps::before {
+      display: none;
+    }
+  }
+  @media (max-width: 900px) {
+    .ov-grid,
+    .strip,
+    .faq-grid {
+      grid-template-columns: 1fr;
+    }
+    .ov-media {
+      position: static;
+      order: -1;
+    }
+    .ov-frame {
+      aspect-ratio: 4 / 3;
+    }
+  }
+  @media (max-width: 640px) {
+    .scope,
+    .steps {
+      grid-template-columns: 1fr;
+    }
+    .hero-actions .btn {
+      flex: 1 1 100%;
+    }
+  }
+</style>

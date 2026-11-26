@@ -1,0 +1,57 @@
+---
+import '@/styles/global.css';
+import Seo, { type SeoProps } from '@/components/Seo.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import FloatingContact from '@/components/FloatingContact.astro';
+import { LOCALE_META } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+import { ANALYTICS } from '@/config/site';
+
+interface Props extends SeoProps {
+  transparentHeader?: boolean;
+}
+
+const { transparentHeader = false, ...seo } = Astro.props;
+const { lang, route } = seo;
+const s = t(lang);
+---
+
+<!doctype html>
+<html lang={LOCALE_META[lang].htmlLang} class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <script is:inline>document.documentElement.classList.replace('no-js', 'js');</script>
+    <slot name="head" />
+    <Seo {...seo} />
+    <meta name="theme-color" content="#0b1420" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    {ANALYTICS.GTM_ID && (
+      <noscript><iframe src={`https://www.googletagmanager.com/ns.html?id=${ANALYTICS.GTM_ID}`} height="0" width="0" style="display:none;visibility:hidden" title="GTM"></iframe></noscript>
+    )}
+    <a class="skip-link" href="#main">{s.skip}</a>
+    <Header lang={lang} route={route} transparent={transparentHeader} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer lang={lang} route={route} />
+    {route !== 'contact' && <FloatingContact lang={lang} />}
+    <script>
+      import '@/scripts/analytics';
+      import '@/scripts/reveal';
+    </script>
+  </body>
+</html>
+
+<style>
+  main:focus {
+    outline: none;
+  }
+</style>

@@ -1,0 +1,168 @@
+---
+/**
+ * Inner-page hero — editorial split: copy on deep navy, photograph bleeding to the right edge.
+ * Built for portrait photography. The image is eager + high priority (often the page's LCP).
+ */
+import { PHOTOS, type PhotoKey } from '@/content/media';
+import { responsiveSet } from '@/lib/images';
+import Breadcrumbs from './Breadcrumbs.astro';
+import type { Locale, RouteKey } from '@/i18n/routes';
+
+interface Props {
+  lang: Locale;
+  photo: PhotoKey;
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  breadcrumbs: { name: string; route: RouteKey }[];
+  focus?: string;
+  index?: string;
+  compact?: boolean;
+}
+const { lang, photo, eyebrow, title, lead, breadcrumbs, focus, index, compact = false } = Astro.props;
+const p = PHOTOS[photo];
+const set = await responsiveSet(p.src, [480, 640, 828, 1080, 1440]);
+---
+
+<section class:list={['page-hero on-dark', { 'page-hero--compact': compact }]}>
+  <div class="ph-copy">
+    <Breadcrumbs lang={lang} items={breadcrumbs} />
+    <div class="ph-text">
+      <p class="label label--rule ph-eyebrow">{eyebrow}</p>
+      <h1 class="ph-title">{title}</h1>
+      {lead && <p class="lead ph-lead">{lead}</p>}
+      <slot />
+    </div>
+    {index && <span class="ph-index" aria-hidden="true">{index}</span>}
+  </div>
+  <div class="ph-media">
+    <picture>
+      <source type="image/avif" srcset={set.avif} sizes="(max-width: 900px) 100vw, 46vw" />
+      <source type="image/webp" srcset={set.webp} sizes="(max-width: 900px) 100vw, 46vw" />
+      <img
+        class="ph-img"
+        src={set.fallback}
+        alt={p.alt[lang]}
+        width={set.width}
+        height={set.height}
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        style={`object-position: ${focus ?? p.focus ?? '50% 50%'}`}
+      />
+    </picture>
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    --edge: max(var(--gutter), calc((100vw - var(--container)) / 2));
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 54fr) minmax(0, 46fr);
+    min-height: min(94svh, 920px);
+    background: var(--navy-dark);
+    color: var(--on-dark);
+  }
+  .page-hero--compact {
+    min-height: min(72svh, 700px);
+  }
+  .ph-copy {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 3rem;
+    padding: calc(var(--header-h) + clamp(1.5rem, 3vw, 2.5rem)) clamp(2rem, 5vw, 5.5rem) clamp(3rem, 6vw, 5.5rem) var(--edge);
+    overflow: hidden;
+  }
+  .ph-text {
+    position: relative;
+    z-index: 1;
+  }
+  .ph-eyebrow {
+    color: var(--gold);
+  }
+  .ph-title {
+    margin-top: 1.5rem;
+    max-width: 12ch;
+    font-size: var(--fs-h1);
+    line-height: 0.98;
+  }
+  .ph-lead {
+    margin-top: 1.75rem;
+    max-width: 34rem;
+    color: rgba(242, 238, 228, 0.82);
+  }
+  .ph-text > :global(.hero-actions) {
+    margin-top: 2.5rem;
+  }
+  .ph-index {
+    position: absolute;
+    right: -0.04em;
+    bottom: -0.2em;
+    font-family: var(--font-serif);
+    font-size: clamp(10rem, 22vw, 22rem);
+    line-height: 1;
+    color: rgba(212, 178, 118, 0.07);
+    pointer-events: none;
+    user-select: none;
+  }
+  .ph-media {
+    position: relative;
+    overflow: hidden;
+    background: var(--navy-deep);
+  }
+  .ph-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .ph-img {
+      animation: ph-zoom 2.6s var(--ease-out) both;
+    }
+    .ph-text > * {
+      animation: ph-rise 1.1s var(--ease-out) both;
+    }
+    .ph-text > :nth-child(2) {
+      animation-delay: 0.08s;
+    }
+    .ph-text > :nth-child(3) {
+      animation-delay: 0.16s;
+    }
+    .ph-text > :nth-child(4) {
+      animation-delay: 0.24s;
+    }
+  }
+  @keyframes ph-zoom {
+    from {
+      transform: scale(1.07);
+    }
+  }
+  @keyframes ph-rise {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .page-hero {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+    .ph-copy {
+      padding: calc(var(--header-h) + 1.5rem) var(--gutter) 3rem;
+      gap: 2.5rem;
+    }
+    .ph-media {
+      aspect-ratio: 4 / 3;
+    }
+    .ph-title {
+      max-width: 14ch;
+    }
+  }
+</style>

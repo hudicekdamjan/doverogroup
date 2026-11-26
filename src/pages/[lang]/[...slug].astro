@@ -1,0 +1,32 @@
+---
+/**
+ * Single router for every localized page. URLs come from src/i18n/routes.ts,
+ * so /en/services/winter-storage/ and /me/usluge/zimski-smjestaj-jahti/ share one view.
+ */
+import type { GetStaticPaths } from 'astro';
+import { LOCALES, ROUTES, type Locale, type RouteKey } from '@/i18n/routes';
+import HomeView from '@/views/HomeView.astro';
+import ServicesView from '@/views/ServicesView.astro';
+import ServiceView from '@/views/ServiceView.astro';
+import AboutView from '@/views/AboutView.astro';
+import ContactView from '@/views/ContactView.astro';
+import { SERVICES } from '@/content/services';
+import { SERVICE_KEYS, type ServiceKey } from '@/i18n/ui';
+
+export const getStaticPaths = (() =>
+  LOCALES.flatMap((lang) =>
+    (Object.keys(ROUTES) as RouteKey[]).map((key) => ({
+      params: { lang, slug: ROUTES[key][lang] || undefined },
+      props: { lang, key },
+    })),
+  )) satisfies GetStaticPaths;
+
+const { lang, key } = Astro.props as { lang: Locale; key: RouteKey };
+const serviceKey = (SERVICE_KEYS as readonly string[]).includes(key) ? (key as ServiceKey) : null;
+---
+
+{key === 'home' && <HomeView lang={lang} />}
+{key === 'services' && <ServicesView lang={lang} />}
+{serviceKey && <ServiceView lang={lang} service={SERVICES[serviceKey]} />}
+{key === 'about' && <AboutView lang={lang} />}
+{key === 'contact' && <ContactView lang={lang} />}

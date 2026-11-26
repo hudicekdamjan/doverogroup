@@ -1,0 +1,74 @@
+---
+/** Bilingual 404 (served for unknown URLs by every static host). Not indexed. */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import { url } from '@/i18n/routes';
+import { UI } from '@/i18n/ui';
+---
+
+<BaseLayout lang="en" title="Page not found — DOVERO GROUP" description="The page you are looking for could not be found." noindex>
+  <section class="nf on-dark">
+    <div class="container nf-inner">
+      <p class="nf-code" aria-hidden="true">404</p>
+      <div class="nf-cols">
+        <div>
+          <h1 class="nf-title">{UI.en.notFound.title}</h1>
+          <p class="nf-text">{UI.en.notFound.text}</p>
+          <a class="btn" href={url('home', 'en')}>{UI.en.notFound.home}<Icon name="arrow" size={10} /></a>
+        </div>
+        <div lang="sr-Latn-ME">
+          <p class="nf-title h2">{UI.me.notFound.title}</p>
+          <p class="nf-text">{UI.me.notFound.text}</p>
+          <a class="btn btn--ghost" href={url('home', 'me')}>{UI.me.notFound.home}<Icon name="arrow" size={10} /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    padding-top: var(--header-h);
+    background: var(--navy-dark);
+    color: var(--on-dark);
+    overflow: hidden;
+  }
+  .nf-inner {
+    position: relative;
+    padding-block: 5rem;
+  }
+  .nf-code {
+    position: absolute;
+    right: var(--gutter);
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-serif);
+    font-size: clamp(10rem, 30vw, 26rem);
+    line-height: 1;
+    color: rgba(212, 178, 118, 0.08);
+    pointer-events: none;
+  }
+  .nf-cols {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4rem;
+    max-width: 60rem;
+  }
+  .nf-title {
+    font-size: var(--fs-h2);
+  }
+  .nf-text {
+    margin: 1.25rem 0 2rem;
+    color: var(--on-dark-soft);
+  }
+  @media (max-width: 760px) {
+    .nf-cols {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
