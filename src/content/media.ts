@@ -10,6 +10,18 @@ import flybridgeHarbour from '@/assets/photos/flybridge-yacht-harbour.jpg';
 import hull from '@/assets/photos/yacht-hull-gelcoat-close-up.jpg';
 import cockpit from '@/assets/photos/yacht-cockpit-upholstery.jpg';
 import dayCruiser from '@/assets/photos/day-cruiser-adriatic.jpg';
+import polishedHull from '@/assets/photos/polished-dark-blue-hull-marina.jpg';
+import polishedReflection from '@/assets/photos/polished-hull-reflection-marina.jpg';
+import fiberglassRepair from '@/assets/photos/fiberglass-repair-hull-prepared.jpg';
+import keelDamage from '@/assets/photos/keel-gelcoat-damage-before-repair.jpg';
+import teakSteps from '@/assets/photos/teak-steps-restored.jpg';
+import teakHalf from '@/assets/photos/teak-deck-restoration-half-done.jpg';
+import teakSanding from '@/assets/photos/teak-bow-deck-sanding.jpg';
+import teakBow from '@/assets/photos/teak-bow-deck-restored.jpg';
+import storageHall from '@/assets/photos/winter-storage-hall-yachts.jpg';
+import storageHallEmpty from '@/assets/photos/winter-storage-hall-interior.jpg';
+import storageStands from '@/assets/photos/winter-storage-hall-boats-on-stands.jpg';
+import storageYard from '@/assets/photos/winter-storage-fenced-yard.jpg';
 
 export interface Photo {
   src: ImageMetadata;
@@ -93,6 +105,102 @@ export const PHOTOS = {
     alt: {
       en: 'Day cruiser with a T-top under way on open water of the Adriatic',
       me: 'Dnevna jahta sa T-top krovom u plovidbi otvorenim Jadranom',
+    },
+  },
+  polishedHull: {
+    src: polishedHull,
+    focus: '50% 55%',
+    alt: {
+      en: 'Freshly polished dark blue yacht hull with a mirror finish reflecting the marina',
+      me: 'Svježe ispoliran tamnoplavi trup jahte sa sjajem u kojem se ogleda marina',
+    },
+  },
+  polishedReflection: {
+    src: polishedReflection,
+    focus: '40% 45%',
+    alt: {
+      en: 'Glossy polished hull side of a yacht in a marina, reflecting moored boats and the sky',
+      me: 'Sjajna ispolirana bočna strana jahte u marini, u kojoj se ogledaju vezani brodovi i nebo',
+    },
+  },
+  fiberglassRepair: {
+    src: fiberglassRepair,
+    focus: '45% 40%',
+    alt: {
+      en: 'Fiberglass hull repair in progress: damaged gelcoat ground back to the laminate and masked off',
+      me: 'Popravka fiberglasa u toku: oštećeni gelcoat izbrušen do laminata i oblijepljen trakom',
+    },
+  },
+  keelDamage: {
+    src: keelDamage,
+    focus: '50% 35%',
+    alt: {
+      en: 'Damaged gelcoat and fiberglass on a yacht keel before repair, boat supported on blocks',
+      me: 'Oštećen gelcoat i fiberglas na kobilici jahte prije popravke, brod oslonjen na podmetače',
+    },
+  },
+  teakSteps: {
+    src: teakSteps,
+    focus: '50% 55%',
+    alt: {
+      en: 'Restored teak steps on a yacht swim platform, cleaned and evenly finished',
+      me: 'Obnovljene stepenice od tikovine na krmenoj platformi jahte, očišćene i ujednačeno obrađene',
+    },
+  },
+  teakHalf: {
+    src: teakHalf,
+    focus: '55% 60%',
+    alt: {
+      en: 'Teak deck restoration halfway done: weathered grey teak next to the restored golden section',
+      me: 'Obnova palube od tikovine na pola posla: izbljedjela siva tikovina pored obnovljenog dijela',
+    },
+  },
+  teakSanding: {
+    src: teakSanding,
+    focus: '50% 55%',
+    alt: {
+      en: 'Teak bow deck being sanded and restored, with dust extraction equipment on board',
+      me: 'Brušenje i obnova pramčane palube od tikovine, uz opremu za usisavanje prašine na jahti',
+    },
+  },
+  teakBow: {
+    src: teakBow,
+    focus: '50% 50%',
+    alt: {
+      en: 'Restored teak bow deck with crisp seams, glowing in the sun',
+      me: 'Obnovljena pramčana paluba od tikovine sa urednim fugama, na suncu',
+    },
+  },
+  storageHall: {
+    src: storageHall,
+    focus: '40% 55%',
+    alt: {
+      en: 'Yachts and jet skis stored on stands inside the DOVERO GROUP winter storage hall',
+      me: 'Jahte i jet skiji smješteni na podmetačima u hali za zimski smještaj DOVERO GROUP',
+    },
+  },
+  storageHallEmpty: {
+    src: storageHallEmpty,
+    focus: '50% 60%',
+    alt: {
+      en: 'Spacious covered winter storage hall with a boat on a trailer',
+      me: 'Prostrana natkrivena hala za zimski smještaj sa čamcem na prikolici',
+    },
+  },
+  storageStands: {
+    src: storageStands,
+    focus: '50% 55%',
+    alt: {
+      en: 'Boats on stands in the winter storage hall, prepared for the off-season',
+      me: 'Brodovi na podmetačima u hali za zimski smještaj, pripremljeni za van sezone',
+    },
+  },
+  storageYard: {
+    src: storageYard,
+    focus: '60% 70%',
+    alt: {
+      en: 'Fenced outdoor storage yard with boats stored on land for the winter',
+      me: 'Ograđeni otvoreni plac sa brodovima smještenim na kopnu tokom zime',
     },
   },
 } satisfies Record<string, Photo>;

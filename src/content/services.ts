@@ -39,8 +39,8 @@ export const SERVICES: Record<ServiceKey, ServiceContent> = {
       en: 'Cleaning, polishing and detailing that restores, protects and maintains the appearance of your yacht.',
       me: 'Pranje, poliranje i detailing koji vraćaju, štite i čuvaju izgled vaše jahte.',
     },
-    heroPhoto: 'stern',
-    detailPhoto: 'cockpit',
+    heroPhoto: 'polishedHull',
+    detailPhoto: 'teakBow',
     serviceType: 'Yacht detailing and polishing',
     seo: {
       en: {
@@ -84,7 +84,7 @@ export const SERVICES: Record<ServiceKey, ServiceContent> = {
           { title: 'Hull & topside polishing', text: 'Machine polishing to reduce oxidation, light scratches and water spots and to bring back depth and gloss.' },
           { title: 'Protective finishes', text: 'Wax or sealant protection chosen for your yacht and how it is used, to keep the finish clean for longer.' },
           { title: 'Stainless steel & brightwork', text: 'Rails, cleats, fittings and trims cleaned and polished to remove spotting and tarnish.' },
-          { title: 'Teak & deck care', text: 'Gentle cleaning of teak and non-slip surfaces that respects the material instead of wearing it down.' },
+          { title: 'Teak deck care & restoration', text: 'Cleaning, sanding and restoring weathered teak decks and steps, so the wood regains its warm, even colour.' },
           { title: 'Interior detailing', text: 'Upholstery, cabinetry, glass and hard surfaces cleaned and refreshed, cabin by cabin.' },
         ],
       },
@@ -95,7 +95,7 @@ export const SERVICES: Record<ServiceKey, ServiceContent> = {
           { title: 'Poliranje trupa i nadgrađa', text: 'Mašinsko poliranje koje umanjuje oksidaciju, sitne ogrebotine i tragove vode i vraća dubinu i sjaj.' },
           { title: 'Zaštitni slojevi', text: 'Vosak ili sealant izabran prema jahti i načinu korišćenja, kako bi površina duže ostala čista.' },
           { title: 'Inox i metalni detalji', text: 'Ograde, bitve, okovi i lajsne očišćeni i ispolirani, bez mrlja i potamnjenja.' },
-          { title: 'Njega tikovine i palube', text: 'Nježno čišćenje tikovine i protivkliznih površina koje čuva materijal umjesto da ga troši.' },
+          { title: 'Njega i obnova tikovine', text: 'Čišćenje, brušenje i obnova izbljedjele tikovine na palubama i stepenicama, kako bi drvo vratilo topao, ujednačen ton.' },
           { title: 'Detailing enterijera', text: 'Tapacirung, namještaj, stakla i tvrde površine očišćeni i osvježeni, kabinu po kabinu.' },
         ],
       },
@@ -123,11 +123,11 @@ export const SERVICES: Record<ServiceKey, ServiceContent> = {
     highlight: {
       en: {
         heading: 'When owners usually call us',
-        text: 'Before the season opens, ahead of a charter or a sale, after winter storage — or simply when the yacht no longer looks the way you remember it.',
+        text: 'Before the season opens, ahead of a sale, after winter storage — or simply when the yacht no longer looks the way you remember it.',
       },
       me: {
         heading: 'Kada nas vlasnici najčešće zovu',
-        text: 'Pred početak sezone, prije čartera ili prodaje, nakon zimskog smještaja — ili jednostavno kada jahta više ne izgleda onako kako je pamtite.',
+        text: 'Pred početak sezone, prije prodaje, nakon zimskog smještaja — ili jednostavno kada jahta više ne izgleda onako kako je pamtite.',
       },
     },
     faq: {
@@ -157,8 +157,8 @@ export const SERVICES: Record<ServiceKey, ServiceContent> = {
       en: 'Professional fiberglass, gelcoat and marine surface repairs, finished to blend in with the surrounding surface.',
       me: 'Profesionalne popravke fiberglasa, gelcoata i površina plovila, završene tako da se stapaju sa okolinom.',
     },
-    heroPhoto: 'hull',
-    detailPhoto: 'flybridgeHarbour',
+    heroPhoto: 'fiberglassRepair',
+    detailPhoto: 'keelDamage',
     serviceType: 'Fiberglass and gelcoat repair',
     seo: {
       en: {
@@ -276,7 +276,7 @@ export const SERVICES: Record<ServiceKey, ServiceContent> = {
       me: 'Održavanje usmjereno na očuvanje stanja, izgleda i funkcionalnosti vaše jahte tokom cijele godine.',
     },
     heroPhoto: 'bow',
-    detailPhoto: 'flybridge',
+    detailPhoto: 'teakSanding',
     serviceType: 'Yacht maintenance',
     seo: {
       en: {
@@ -390,43 +390,43 @@ export const SERVICES: Record<ServiceKey, ServiceContent> = {
     number: '04',
     name: { en: 'Winter Storage', me: 'Zimski smještaj' },
     summary: {
-      en: 'Seasonal storage in an indoor hall or a fenced outdoor yard — both under video surveillance — with preparation before and after.',
-      me: 'Sezonski smještaj u hali ili na ograđenom placu — oba pod video nadzorom — uz pripremu prije i poslije.',
+      en: 'Seasonal storage in an indoor hall or a fenced outdoor yard, both under motion-detection video surveillance with instant phone alarms.',
+      me: 'Sezonski smještaj u hali ili na ograđenom placu, oba pod video nadzorom sa detekcijom pokreta i trenutnim alarmom na telefon.',
     },
-    heroPhoto: 'convoy',
-    detailPhoto: 'stern',
+    heroPhoto: 'storageHall',
+    detailPhoto: 'storageYard',
     serviceType: 'Boat and yacht winter storage',
     seo: {
       en: {
         title: 'Yacht & Boat Winter Storage in Montenegro | DOVERO GROUP',
         description:
-          'Winter storage for yachts and boats in the Bay of Kotor: indoor hall or fenced outdoor yard, both under video surveillance, with pre-season preparation.',
+          'Winter storage for yachts and boats in the Bay of Kotor: indoor hall or fenced yard with motion-detection cameras and instant phone alarms.',
       },
       me: {
         title: 'Zimski smještaj plovila i jahti — hala i plac | DOVERO GROUP',
         description:
-          'Zimovanje plovila u Boki Kotorskoj: smještaj u hali ili na ograđenom placu, oba pod video nadzorom, uz pripremu jahte prije i poslije zime. Zatražite ponudu.',
+          'Zimovanje plovila u Boki Kotorskoj: hala ili ograđeni plac pod video nadzorom sa detekcijom pokreta i alarmom na telefon. Zatražite ponudu.',
       },
     },
     eyebrow: { en: 'Service 04 · Winter Storage', me: 'Usluga 04 · Zimski smještaj' },
     h1: { en: 'Winter Yacht Storage', me: 'Zimski smještaj jahti i plovila' },
     lead: {
-      en: 'An indoor hall or a fenced outdoor yard — both under video surveillance — with careful preparation before storage and before your yacht returns to the water.',
-      me: 'Hala ili ograđeni plac — oba pod video nadzorom — uz pažljivu pripremu prije smještaja i prije povratka jahte u more.',
+      en: 'An indoor hall or a fenced outdoor yard, both protected by motion-detection video surveillance, with careful preparation before storage and before your yacht returns to the water.',
+      me: 'Hala ili ograđeni plac, oba zaštićena video nadzorom sa detekcijom pokreta, uz pažljivu pripremu prije smještaja i prije povratka jahte u more.',
     },
     overview: {
       en: {
         heading: 'A secure place for the quiet months.',
         paragraphs: [
           'Winter is when a yacht is most exposed to neglect. Weather, moisture and months without attention can undo a season of good care. Where and how it is stored makes a real difference to the condition it will be in next spring.',
-          'DOVERO GROUP offers two storage options: an indoor storage hall and a fenced outdoor yard. Both are under video surveillance. We help you choose the right one for your yacht, prepare it before the winter and get it ready again for the season — and because storage sits next to our detailing and repair work, winter is also the ideal time to have those jobs done.',
+          'DOVERO GROUP offers two storage options: an indoor storage hall and a fenced outdoor yard. Both are under video surveillance with motion detection: any movement triggers an instant alarm on our phone, where the camera footage can be checked straight away. We help you choose the right one for your yacht, prepare it before the winter and get it ready again for the season — and because storage sits next to our detailing and repair work, winter is also the ideal time to have those jobs done.',
         ],
       },
       me: {
         heading: 'Sigurno mjesto za mirne mjesece.',
         paragraphs: [
           'Zima je period kada je jahta najizloženija zapuštanju. Vremenske prilike, vlaga i mjeseci bez pažnje mogu poništiti cijelu sezonu dobrog održavanja. Gdje i kako je jahta smještena zaista utiče na stanje u kojem će dočekati proljeće.',
-          'DOVERO GROUP nudi dvije opcije smještaja: zatvorenu halu i ograđeni otvoreni plac. Oba prostora su pod video nadzorom. Pomažemo vam da izaberete pravo rješenje za vašu jahtu, pripremimo je prije zime i ponovo spremimo za sezonu — a pošto je smještaj povezan sa našim detailingom i popravkama, zima je idealno vrijeme i za te radove.',
+          'DOVERO GROUP nudi dvije opcije smještaja: zatvorenu halu i ograđeni otvoreni plac. Oba prostora su pod video nadzorom sa detekcijom pokreta: svaki pokret odmah aktivira alarm na našem telefonu, gdje se snimak kamera može odmah pregledati. Pomažemo vam da izaberete pravo rješenje za vašu jahtu, pripremimo je prije zime i ponovo spremimo za sezonu — a pošto je smještaj povezan sa našim detailingom i popravkama, zima je idealno vrijeme i za te radove.',
         ],
       },
     },
@@ -436,7 +436,7 @@ export const SERVICES: Record<ServiceKey, ServiceContent> = {
         items: [
           { title: 'Indoor storage hall', text: 'Covered storage that keeps your yacht out of the rain, sun and wind through the winter.' },
           { title: 'Fenced outdoor yard', text: 'A secured, fenced yard for yachts and boats stored on land in the open air.' },
-          { title: 'Video surveillance', text: 'Both the hall and the outdoor yard are monitored by video surveillance.' },
+          { title: 'Motion-detection surveillance', text: 'Cameras cover the hall and the yard. Any movement triggers an instant alarm on our phone, where the footage can be checked immediately.' },
           { title: 'Preparation for storage', text: 'Thorough cleaning and preparation before the yacht goes into storage for the winter.' },
           { title: 'Spring preparation', text: 'Cleaning, polishing and preparation so the yacht is ready for the new season.' },
           { title: 'Winter works', text: 'Detailing, polishing and gelcoat repairs scheduled while the yacht is in storage.' },
@@ -447,7 +447,7 @@ export const SERVICES: Record<ServiceKey, ServiceContent> = {
         items: [
           { title: 'Zatvorena hala', text: 'Natkriven smještaj koji jahtu tokom zime čuva od kiše, sunca i vjetra.' },
           { title: 'Ograđeni otvoreni plac', text: 'Obezbijeđen, ograđen plac za jahte i čamce smještene na kopnu na otvorenom.' },
-          { title: 'Video nadzor', text: 'I hala i otvoreni plac su pod video nadzorom.' },
+          { title: 'Video nadzor sa detekcijom pokreta', text: 'Kamere pokrivaju halu i plac. Svaki pokret odmah šalje alarm na naš telefon, gdje se snimak može odmah pregledati.' },
           { title: 'Priprema za smještaj', text: 'Temeljno čišćenje i priprema prije nego što jahta ode na zimovanje.' },
           { title: 'Priprema za proljeće', text: 'Čišćenje, poliranje i priprema kako bi jahta bila spremna za novu sezonu.' },
           { title: 'Radovi tokom zime', text: 'Detailing, poliranje i popravke gelcoata zakazani dok je jahta u smještaju.' },
@@ -460,7 +460,7 @@ export const SERVICES: Record<ServiceKey, ServiceContent> = {
         steps: [
           { title: 'Reserve', text: 'Tell us about your yacht and the dates. We confirm availability and the right option.' },
           { title: 'Prepare', text: 'The yacht is cleaned and prepared before it goes into storage.' },
-          { title: 'Store', text: 'Your yacht stays in the hall or the fenced yard, under video surveillance.' },
+          { title: 'Store', text: 'Your yacht stays in the hall or the fenced yard, watched by motion-detection cameras.' },
           { title: 'Relaunch-ready', text: 'Before the season, the yacht is cleaned and prepared to go back on the water.' },
         ],
       },
@@ -469,154 +469,38 @@ export const SERVICES: Record<ServiceKey, ServiceContent> = {
         steps: [
           { title: 'Rezervacija', text: 'Opišite nam jahtu i termine. Potvrđujemo raspoloživost i odgovarajuću opciju.' },
           { title: 'Priprema', text: 'Jahta se čisti i priprema prije smještaja.' },
-          { title: 'Smještaj', text: 'Jahta zimuje u hali ili na ograđenom placu, pod video nadzorom.' },
+          { title: 'Smještaj', text: 'Jahta zimuje u hali ili na ograđenom placu, pod kamerama sa detekcijom pokreta.' },
           { title: 'Spremna za more', text: 'Pred sezonu jahtu čistimo i pripremamo za povratak u more.' },
         ],
       },
     },
     highlight: {
       en: {
-        heading: 'Plan ahead for the winter',
-        text: 'Storage space is limited by nature. Contact us in late summer or early autumn to discuss availability, the right option and pricing for your yacht.',
+        heading: 'Alarm on movement, straight to our phone',
+        text: 'The hall and the yard are covered by cameras with motion detection. If anything moves, an alarm is sent to our phone immediately, where the live footage can be checked.',
       },
       me: {
-        heading: 'Planirajte zimovanje na vrijeme',
-        text: 'Prostor za smještaj je po prirodi ograničen. Javite nam se krajem ljeta ili početkom jeseni radi raspoloživosti, izbora opcije i cijene za vašu jahtu.',
+        heading: 'Alarm na svaki pokret, direktno na naš telefon',
+        text: 'Hala i plac su pokriveni kamerama sa detekcijom pokreta. Ako se bilo šta pomjeri, alarm odmah stiže na naš telefon, gdje se snimak uživo može pregledati.',
       },
     },
     faq: {
       en: [
         { q: 'Indoor hall or outdoor yard — which should I choose?', a: 'Indoor storage gives the most protection from weather and sun. The fenced outdoor yard suits many yachts and boats well, especially when combined with proper covers and preparation. We will help you decide based on your yacht and plans.' },
-        { q: 'Is the storage secure?', a: 'Yes. The outdoor yard is fenced, and both the indoor hall and the yard are under video surveillance.' },
+        { q: 'Is the storage secure?', a: 'Yes. The outdoor yard is fenced, and both the indoor hall and the yard are under video surveillance with motion detection. If the cameras detect any movement, an alarm is sent instantly to our phone, where the footage can be reviewed straight away.' },
         { q: 'Can work be done on the yacht during the winter?', a: 'Yes. Winter is an ideal time for polishing, detailing and gelcoat repairs, so the yacht leaves storage ready for the season.' },
         { q: 'Where is the storage located?', a: 'Contact us for the exact location, availability and pricing for the coming season.' },
+        { q: 'When should I book winter storage?', a: 'Storage space is limited, so contact us in late summer or early autumn to discuss availability, the right option and pricing for your yacht.' },
       ],
       me: [
         { q: 'Hala ili otvoreni plac — šta da izaberem?', a: 'Smještaj u hali pruža najveću zaštitu od vremenskih uslova i sunca. Ograđeni otvoreni plac dobro odgovara mnogim jahtama i čamcima, naročito uz odgovarajuće cerade i pripremu. Pomoći ćemo vam da odlučite prema jahti i vašim planovima.' },
-        { q: 'Da li je smještaj obezbijeđen?', a: 'Da. Otvoreni plac je ograđen, a i hala i plac su pod video nadzorom.' },
+        { q: 'Da li je smještaj obezbijeđen?', a: 'Da. Otvoreni plac je ograđen, a i hala i plac su pod video nadzorom sa detekcijom pokreta. Ako kamere registruju bilo kakav pokret, alarm odmah stiže na naš telefon, gdje se snimak može odmah pregledati.' },
         { q: 'Mogu li se tokom zime raditi radovi na jahti?', a: 'Mogu. Zima je idealno vrijeme za poliranje, detailing i popravke gelcoata, pa jahta iz smještaja izlazi spremna za sezonu.' },
         { q: 'Gdje se nalazi smještaj?', a: 'Kontaktirajte nas za tačnu lokaciju, raspoloživost i cijene za narednu sezonu.' },
+        { q: 'Kada treba rezervisati zimski smještaj?', a: 'Prostor za smještaj je ograničen, pa nam se javite krajem ljeta ili početkom jeseni radi raspoloživosti, izbora opcije i cijene za vašu jahtu.' },
       ],
     },
     related: ['maintenance', 'detailing', 'repairs'],
-  },
-
-  /* ─────────────────────────────── 05 CHARTER ─────────────────────────────── */
-  charter: {
-    key: 'charter',
-    route: 'charter',
-    number: '05',
-    name: { en: 'Yacht Charter', me: 'Najam jahti' },
-    summary: {
-      en: 'Yacht charters arranged by our agency for guests who want to experience the Montenegrin coast in comfort and style.',
-      me: 'Najam jahti u organizaciji naše agencije, za goste koji crnogorsku obalu žele da dožive udobno i sa stilom.',
-    },
-    heroPhoto: 'cruising',
-    detailPhoto: 'convoy',
-    serviceType: 'Yacht charter agency',
-    seo: {
-      en: {
-        title: 'Yacht Charter Montenegro — Tivat, Kotor, Budva | DOVERO GROUP',
-        description:
-          'Yacht charter in Montenegro arranged by DOVERO GROUP: day trips and longer charters from Tivat, Porto Montenegro, Kotor, Herceg Novi and Budva.',
-      },
-      me: {
-        title: 'Najam jahti Crna Gora — Tivat, Kotor, Budva | DOVERO GROUP',
-        description:
-          'Iznajmljivanje jahti u Crnoj Gori u organizaciji agencije DOVERO GROUP: dnevne ture i duži čarteri iz Tivta, Porto Montenegra, Kotora, Herceg Novog i Budve.',
-      },
-    },
-    eyebrow: { en: 'Service 05 · Charter Agency', me: 'Usluga 05 · Čarter agencija' },
-    h1: { en: 'Yacht Charter in Montenegro', me: 'Najam jahti u Crnoj Gori' },
-    lead: {
-      en: 'Days on the water in the Bay of Kotor and along the Montenegrin coast, arranged by an agency that knows these waters and the yachts it recommends.',
-      me: 'Dani na moru u Boki Kotorskoj i duž crnogorske obale, u organizaciji agencije koja poznaje ove vode i jahte koje preporučuje.',
-    },
-    overview: {
-      en: {
-        heading: 'The right yacht, arranged for you.',
-        paragraphs: [
-          'DOVERO GROUP works as a charter agency. We do not own the yachts we offer — we work with yacht owners in the region and match you with the yacht that suits your group, your plans and your budget, then take care of the arrangements.',
-          'Because yacht care is our everyday work, we look at a charter yacht the way an owner would. You get honest advice on which yacht fits, a clear offer, and one point of contact from the first message until you are back on the dock.',
-        ],
-      },
-      me: {
-        heading: 'Prava jahta, organizovana za vas.',
-        paragraphs: [
-          'DOVERO GROUP posluje kao čarter agencija. Jahte koje nudimo nijesu u našem vlasništvu — sarađujemo sa vlasnicima jahti u regionu i biramo onu koja odgovara vašem društvu, planovima i budžetu, a zatim preuzimamo organizaciju.',
-          'Pošto nam je njega jahti svakodnevni posao, čarter jahtu gledamo očima vlasnika. Dobijate iskren savjet koja jahta vam odgovara, jasnu ponudu i jednu kontakt osobu od prve poruke do povratka na mol.',
-        ],
-      },
-    },
-    scope: {
-      en: {
-        heading: 'What we arrange',
-        items: [
-          { title: 'Yacht selection', text: 'We suggest yachts that match your group size, preferences and budget — and explain the differences.' },
-          { title: 'Day charters', text: 'A day exploring the Bay of Kotor or the coast, with time for swimming, lunch and quiet bays.' },
-          { title: 'Longer charters', text: 'Multi-day charters for guests who want to see more of the Montenegrin coast.' },
-          { title: 'Route suggestions', text: 'Ideas for the day — from Perast and Our Lady of the Rocks to the Blue Cave and the Budva riviera.' },
-          { title: 'Practical arrangements', text: 'Dates, boarding point, timing and any extras you request, confirmed in advance.' },
-          { title: 'One point of contact', text: 'A single contact who stays with you from the first inquiry to the end of the charter.' },
-        ],
-      },
-      me: {
-        heading: 'Šta organizujemo',
-        items: [
-          { title: 'Izbor jahte', text: 'Predlažemo jahte prema broju gostiju, željama i budžetu — i objašnjavamo razlike.' },
-          { title: 'Dnevni čarteri', text: 'Dan u istraživanju Boke Kotorske ili obale, uz kupanje, ručak i mirne uvale.' },
-          { title: 'Višednevni čarteri', text: 'Duži čarteri za goste koji žele da vide više crnogorske obale.' },
-          { title: 'Prijedlozi ruta', text: 'Ideje za dan — od Perasta i Gospe od Škrpjela do Plave špilje i budvanske rivijere.' },
-          { title: 'Praktična organizacija', text: 'Termini, mjesto ukrcaja, satnica i dodatni zahtjevi, potvrđeni unaprijed.' },
-          { title: 'Jedna kontakt osoba', text: 'Jedna osoba koja je uz vas od prvog upita do kraja čartera.' },
-        ],
-      },
-    },
-    process: {
-      en: {
-        heading: 'Booking a charter',
-        steps: [
-          { title: 'Tell us your plans', text: 'Dates, number of guests, the kind of day you have in mind and your budget.' },
-          { title: 'Receive options', text: 'We suggest suitable yachts with clear information and prices.' },
-          { title: 'Confirm', text: 'You choose the yacht and we confirm the details and arrangements.' },
-          { title: 'Enjoy the sea', text: 'Board at the agreed time and place. We stay available throughout.' },
-        ],
-      },
-      me: {
-        heading: 'Kako rezervisati čarter',
-        steps: [
-          { title: 'Opišite plan', text: 'Termin, broj gostiju, kakav dan zamišljate i budžet.' },
-          { title: 'Dobijte opcije', text: 'Predlažemo odgovarajuće jahte sa jasnim informacijama i cijenama.' },
-          { title: 'Potvrda', text: 'Vi birate jahtu, a mi potvrđujemo detalje i organizaciju.' },
-          { title: 'Uživajte u moru', text: 'Ukrcavate se u dogovoreno vrijeme i na dogovorenom mjestu. Dostupni smo sve vrijeme.' },
-        ],
-      },
-    },
-    highlight: {
-      en: {
-        heading: 'Boarding points',
-        text: 'Depending on the yacht, charters can start from Tivat and Porto Montenegro, Kotor, Herceg Novi or Budva. We confirm the boarding point in your offer.',
-      },
-      me: {
-        heading: 'Mjesta ukrcaja',
-        text: 'Zavisno od jahte, čarter može početi iz Tivta i Porto Montenegra, Kotora, Herceg Novog ili Budve. Mjesto ukrcaja potvrđujemo u ponudi.',
-      },
-    },
-    faq: {
-      en: [
-        { q: 'Do you own the yachts?', a: 'No. DOVERO GROUP is a charter agency. We work with yacht owners in the region and arrange the charter on your behalf, as your single point of contact.' },
-        { q: 'Is a skipper included?', a: 'It depends on the yacht and the type of charter. Every offer states clearly what is included.' },
-        { q: 'How far in advance should I book?', a: 'For July and August, as early as possible. Outside the peak season, shorter notice is often possible — just ask.' },
-        { q: 'What information do you need for an offer?', a: 'Your preferred dates, the number of guests, the kind of day or trip you have in mind and an approximate budget.' },
-      ],
-      me: [
-        { q: 'Da li su jahte vaše?', a: 'Nijesu. DOVERO GROUP je čarter agencija. Sarađujemo sa vlasnicima jahti u regionu i organizujemo čarter u vaše ime, kao jedina kontakt tačka.' },
-        { q: 'Da li je skiper uključen?', a: 'Zavisi od jahte i vrste čartera. U svakoj ponudi jasno je navedeno šta je uključeno.' },
-        { q: 'Koliko unaprijed treba rezervisati?', a: 'Za jul i avgust — što ranije. Van glavne sezone često je moguće i u kraćem roku, samo pitajte.' },
-        { q: 'Koje informacije su vam potrebne za ponudu?', a: 'Željeni termin, broj gostiju, kakav dan ili putovanje zamišljate i okvirni budžet.' },
-      ],
-    },
-    related: ['detailing', 'maintenance', 'storage'],
   },
 };
 

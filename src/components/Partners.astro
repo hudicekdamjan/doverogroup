@@ -1,0 +1,157 @@
+---
+/** "Our partners" band: equal cards, logos recoloured for the dark theme. Data in src/config/site.ts. */
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { PARTNERS } from '@/config/site';
+import { url as pageUrl } from '@/i18n/routes';
+import { SERVICES } from '@/content/services';
+import type { Locale } from '@/i18n/routes';
+import adriatic from '@/assets/partners/adriatic-yachting.png';
+import yachtHotel from '@/assets/partners/yacht-hotel.png';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const LOGOS: Record<string, { src: ImageMetadata; height: number }> = {
+  // heights balance the two marks optically (one is wide and bold, the other light and tall)
+  'adriatic-yachting': { src: adriatic, height: 92 },
+  'yacht-hotel': { src: yachtHotel, height: 84 },
+};
+const C = {
+  en: { label: 'Our partners', title: 'Working together on the Adriatic', visit: 'Visit website' },
+  me: { label: 'Naši partneri', title: 'Zajedno na Jadranu', visit: 'Posjetite sajt' },
+}[lang];
+---
+
+<section class="partners" aria-labelledby="partners-title">
+  <div class="container">
+    <header class="pt-head">
+      <p class="label label--rule">{C.label}</p>
+      <h2 class="pt-title" id="partners-title">{C.title}</h2>
+    </header>
+    <ul role="list" class="pt-grid">
+      {
+        PARTNERS.map((p) => {
+          const href = p.url || (p.route ? pageUrl(p.route, lang) : '');
+          const external = Boolean(p.url);
+          const label = p.url ? p.label : p.route ? SERVICES[p.route].name[lang] : '';
+          const Tag = href ? 'a' : 'div';
+          const linkAttrs = href
+            ? { href, ...(external ? { target: '_blank', rel: 'noopener' } : {}), 'data-track': 'partner_click', 'data-track-label': p.id }
+            : {};
+          return (
+            <li>
+              <Tag class:list={['pt-card', { 'pt-card--link': href }]} {...linkAttrs}>
+                <span class="pt-logo">
+                  <Image src={LOGOS[p.id].src} alt={p.name} height={LOGOS[p.id].height} densities={[1, 2]} style={`height:${LOGOS[p.id].height}px`} />
+                </span>
+                <span class="pt-foot">
+                  <span class="pt-name">{p.name}</span>
+                  {href && (
+                    <span class="pt-link">
+                      {label}
+                      <Icon name="arrow" size={8} />
+                      {external && <span class="visually-hidden">({C.visit})</span>}
+                    </span>
+                  )}
+                </span>
+              </Tag>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .partners {
+    padding-block: clamp(4rem, 7vw, 6rem);
+    background: var(--surface);
+    border-top: 1px solid var(--line-dark);
+  }
+  .pt-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+  .pt-title {
+    font-size: var(--fs-h3);
+  }
+  .pt-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.5rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .pt-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    background:
+      radial-gradient(120% 90% at 50% 0%, rgba(212, 178, 118, 0.07), transparent 60%),
+      var(--surface-3);
+    transition:
+      border-color 0.4s var(--ease),
+      transform 0.5s var(--ease-out);
+  }
+  .pt-logo {
+    display: grid;
+    place-items: center;
+    height: clamp(10rem, 16vw, 12.5rem);
+    padding: 1.5rem;
+  }
+  .pt-logo :global(img) {
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    opacity: 0.88;
+    transition: opacity 0.4s var(--ease);
+  }
+  .pt-foot {
+    display: flex;
+    min-height: 3.4rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.4rem;
+    border-top: 1px solid var(--line-dark);
+  }
+  .pt-name {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .pt-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--gold);
+  }
+  .pt-card--link:hover {
+    border-color: rgba(236, 211, 160, 0.6);
+    transform: translateY(-3px);
+  }
+  .pt-card--link:hover .pt-logo :global(img) {
+    opacity: 1;
+  }
+  @media (max-width: 640px) {
+    .pt-grid {
+      grid-template-columns: 1fr;
+    }
+    .pt-logo :global(img) {
+      max-height: 76px;
+    }
+  }
+</style>

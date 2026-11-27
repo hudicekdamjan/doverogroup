@@ -5,7 +5,7 @@
 import { whatsappUrl } from '@/config/site';
 
 export const CONTACT_METHODS = ['whatsapp', 'viber', 'phone'] as const;
-export const SERVICE_OPTIONS = ['detailing', 'repairs', 'maintenance', 'storage', 'charter', 'other'] as const;
+export const SERVICE_OPTIONS = ['detailing', 'repairs', 'maintenance', 'storage', 'other'] as const;
 
 export type ContactMethod = (typeof CONTACT_METHODS)[number];
 export type ServiceOption = (typeof SERVICE_OPTIONS)[number];

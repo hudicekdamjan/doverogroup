@@ -85,6 +85,16 @@ export const SOCIAL: { label: string; url: string }[] = [
 ];
 
 /**
+ * Partners shown in the "Our partners" band above the footer (logos in src/assets/partners/).
+ * Confirmed by the client. Add or remove entries here.
+ */
+export const PARTNERS: { id: string; name: string; url: string; label: string; route?: 'storage' }[] = [
+  { id: 'adriatic-yachting', name: 'Adriatic Yachting', url: 'https://www.adriaticyachting.me/', label: 'adriaticyachting.me' },
+  // No website yet: the card links to our Winter Storage page (their hall). Set url + label when their site exists.
+  { id: 'yacht-hotel', name: 'Yacht Hotel', url: '', label: '', route: 'storage' },
+];
+
+/**
  * Analytics — leave empty to load no tracking scripts at all.
  * Use ONE of them: GTM (recommended, configure GA4 inside GTM) or GA4 directly.
  */

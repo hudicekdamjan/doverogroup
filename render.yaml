@@ -19,6 +19,13 @@ services:
       - type: redirect
         source: /index.html
         destination: /en/
+      # Removed yacht charter pages → services overview
+      - type: redirect
+        source: /en/yacht-charter/*
+        destination: /en/services/
+      - type: redirect
+        source: /me/najam-jahti/*
+        destination: /me/usluge/
     headers:
       - path: /*
         name: X-Content-Type-Options

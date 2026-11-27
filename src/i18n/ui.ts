@@ -78,7 +78,6 @@ export const UI = {
         repairs: 'Fiberglass & Gelcoat Repairs',
         maintenance: 'Yacht Maintenance',
         storage: 'Winter Storage',
-        charter: 'Yacht Charter',
         other: 'Other',
       },
       submit: 'Send inquiry',
@@ -222,7 +221,6 @@ export const UI = {
         repairs: 'Popravke fiberglasa i gelcoata',
         maintenance: 'Održavanje jahti',
         storage: 'Zimski smještaj',
-        charter: 'Najam jahti',
         other: 'Ostalo',
       },
       submit: 'Pošaljite upit',
@@ -297,5 +295,5 @@ export function t(lang: Locale): UIStrings {
   return UI[lang] as unknown as UIStrings;
 }
 
-export const SERVICE_KEYS = ['detailing', 'repairs', 'maintenance', 'storage', 'charter'] as const;
+export const SERVICE_KEYS = ['detailing', 'repairs', 'maintenance', 'storage'] as const;
 export type ServiceKey = (typeof SERVICE_KEYS)[number];

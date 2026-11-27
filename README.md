@@ -42,7 +42,6 @@ Requires Node 20+.
 | Fiberglass & Gelcoat | `/en/services/fiberglass-gelcoat-repairs/` | `/me/usluge/popravke-fiberglasa-i-gelcoata/` |
 | Maintenance | `/en/services/yacht-maintenance/` | `/me/usluge/odrzavanje-jahti/` |
 | Winter Storage | `/en/services/winter-storage/` | `/me/usluge/zimski-smjestaj-jahti/` |
-| Yacht Charter | `/en/yacht-charter/` | `/me/najam-jahti/` |
 | About | `/en/about-us/` | `/me/o-nama/` |
 | Contact | `/en/contact/` | `/me/kontakt/` |
 

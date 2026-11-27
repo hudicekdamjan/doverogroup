@@ -19,7 +19,6 @@ export const ROUTES = {
   repairs: { en: 'services/fiberglass-gelcoat-repairs', me: 'usluge/popravke-fiberglasa-i-gelcoata' },
   maintenance: { en: 'services/yacht-maintenance', me: 'usluge/odrzavanje-jahti' },
   storage: { en: 'services/winter-storage', me: 'usluge/zimski-smjestaj-jahti' },
-  charter: { en: 'yacht-charter', me: 'najam-jahti' },
   about: { en: 'about-us', me: 'o-nama' },
   contact: { en: 'contact', me: 'kontakt' },
 } as const satisfies Record<string, Record<Locale, string>>;

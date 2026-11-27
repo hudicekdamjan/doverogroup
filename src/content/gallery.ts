@@ -12,7 +12,7 @@ import type { ImageMetadata } from 'astro';
 import type { Locale } from '@/i18n/routes';
 import { PHOTOS } from './media';
 
-export type GalleryCategory = 'detailing' | 'repairs' | 'maintenance' | 'finished' | 'charter';
+export type GalleryCategory = 'detailing' | 'repairs' | 'teak' | 'storage' | 'maintenance' | 'finished' | 'onwater';
 
 export interface GalleryItem {
   src: ImageMetadata;
@@ -32,22 +32,31 @@ export interface BeforeAfterItem {
 export const GALLERY_CATEGORIES: Record<GalleryCategory, Record<Locale, string>> = {
   detailing: { en: 'Detailing & polishing', me: 'Detailing i poliranje' },
   repairs: { en: 'Fiberglass & gelcoat', me: 'Fiberglas i gelcoat' },
+  teak: { en: 'Teak decks', me: 'Tikovina' },
+  storage: { en: 'Winter storage', me: 'Zimski smještaj' },
   maintenance: { en: 'Maintenance', me: 'Održavanje' },
   finished: { en: 'Finished yachts', me: 'Uređene jahte' },
-  charter: { en: 'On the water', me: 'Na moru' },
+  onwater: { en: 'On the water', me: 'Na moru' },
 };
 
 const p = (key: keyof typeof PHOTOS) => ({ src: PHOTOS[key].src, alt: PHOTOS[key].alt, focus: PHOTOS[key].focus });
 
 export const GALLERY: GalleryItem[] = [
-  { ...p('cruising'), category: 'charter', size: 'wide' },
+  { ...p('polishedReflection'), category: 'detailing', size: 'tall' },
+  { ...p('storageHall'), category: 'storage', size: 'wide' },
+  { ...p('teakHalf'), category: 'teak', size: 'tall' },
+  { ...p('fiberglassRepair'), category: 'repairs', size: 'square' },
+  { ...p('teakBow'), category: 'teak', size: 'tall' },
+  { ...p('polishedHull'), category: 'detailing', size: 'tall' },
+  { ...p('keelDamage'), category: 'repairs', size: 'tall' },
+  { ...p('storageYard'), category: 'storage', size: 'wide' },
+  { ...p('teakSteps'), category: 'teak', size: 'tall' },
+  { ...p('teakSanding'), category: 'teak', size: 'square' },
+  { ...p('storageStands'), category: 'storage', size: 'square' },
+  { ...p('storageHallEmpty'), category: 'storage', size: 'square' },
+  { ...p('cruising'), category: 'onwater', size: 'wide' },
   { ...p('stern'), category: 'detailing', size: 'tall' },
-  { ...p('flybridge'), category: 'finished', size: 'tall' },
-  { ...p('bow'), category: 'detailing', size: 'tall' },
-  { ...p('hull'), category: 'finished', size: 'square' },
-  { ...p('convoy'), category: 'charter', size: 'tall' },
-  { ...p('cockpit'), category: 'detailing', size: 'square' },
-  { ...p('dayCruiser'), category: 'charter', size: 'tall' },
+  { ...p('convoy'), category: 'onwater', size: 'tall' },
 ];
 
 /** Before/after pairs — shown in a comparison slider when entries exist. */
