@@ -60,7 +60,7 @@ export function whatsappUrl(message?: string): string {
  * Used in copy, the footer and structured data (`areaServed`). Only list confirmed places.
  */
 export const SERVICE_AREAS = [
-  { id: 'tivat', name: 'Tivat', detail: 'Porto Montenegro' },
+  { id: 'tivat', name: 'Tivat', detail: '' },
   { id: 'kotor', name: 'Kotor', detail: '' },
   { id: 'herceg-novi', name: 'Herceg Novi', detail: '' },
   { id: 'budva', name: 'Budva', detail: '' },

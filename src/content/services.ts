@@ -53,12 +53,12 @@ export const SERVICES: Record<ServiceKey, ServiceContent> = {
       en: {
         title: 'Yacht Detailing & Polishing in Montenegro | DOVERO GROUP',
         description:
-          'Professional yacht detailing, hull polishing and protective finishes in Tivat, Porto Montenegro, Kotor, Herceg Novi and Budva. Request a quote today.',
+          'Professional yacht detailing, hull polishing and protective finishes in Tivat, Kotor, Herceg Novi and Budva. Request a quote today.',
       },
       me: {
         title: 'Poliranje i detailing jahti — Tivat, Kotor | DOVERO GROUP',
         description:
-          'Profesionalno poliranje trupa, detailing i zaštita površina jahti i plovila u Tivtu, Porto Montenegru, Kotoru, Herceg Novom i Budvi. Zatražite ponudu.',
+          'Profesionalno poliranje trupa, detailing i zaštita površina jahti i plovila u Tivtu, Kotoru, Herceg Novom i Budvi. Zatražite ponudu.',
       },
     },
     eyebrow: { en: 'Service 01 · Detailing & Polishing', me: 'Usluga 01 · Detailing i poliranje' },
