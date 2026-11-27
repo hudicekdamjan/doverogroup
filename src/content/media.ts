@@ -22,6 +22,10 @@ import storageHall from '@/assets/photos/winter-storage-hall-yachts.jpg';
 import storageHallEmpty from '@/assets/photos/winter-storage-hall-interior.jpg';
 import storageStands from '@/assets/photos/winter-storage-hall-boats-on-stands.jpg';
 import storageYard from '@/assets/photos/winter-storage-fenced-yard.jpg';
+import gelcoatBefore from '@/assets/photos/gelcoat-damage-before-repair.jpg';
+import gelcoatDuring from '@/assets/photos/gelcoat-repair-filling-masked.jpg';
+import gelcoatAfter from '@/assets/photos/gelcoat-repair-after-lacquering.jpg';
+import gelcoatEdge from '@/assets/photos/gelcoat-edge-cracks-before.jpg';
 
 export interface Photo {
   src: ImageMetadata;
@@ -203,6 +207,38 @@ export const PHOTOS = {
       me: 'Ograđeni otvoreni plac sa brodovima smještenim na kopnu tokom zime',
     },
   },
+  gelcoatBefore: {
+    src: gelcoatBefore,
+    focus: '45% 35%',
+    alt: {
+      en: 'Before repair: chipped gelcoat and impact damage along the gunwale of a grey hull',
+      me: 'Prije popravke: okrhnut gelcoat i oštećenja od udarca duž ivice sivog trupa',
+    },
+  },
+  gelcoatDuring: {
+    src: gelcoatDuring,
+    focus: '50% 45%',
+    alt: {
+      en: 'During repair: damaged areas filled and sanded, the hull masked off ready for lacquering',
+      me: 'Tokom popravke: oštećenja kitovana i izbrušena, trup oblijepljen i spreman za lakiranje',
+    },
+  },
+  gelcoatAfter: {
+    src: gelcoatAfter,
+    focus: '50% 60%',
+    alt: {
+      en: 'After repair and lacquering: the grey hull side refinished with an even, glossy surface',
+      me: 'Poslije popravke i lakiranja: bok sivog trupa obnovljen, ujednačen i sjajan',
+    },
+  },
+  gelcoatEdge: {
+    src: gelcoatEdge,
+    focus: '50% 45%',
+    alt: {
+      en: 'Cracked and chipped gelcoat along the edge of a white deck before repair',
+      me: 'Ispucao i okrhnut gelcoat duž ivice bijele palube prije popravke',
+    },
+  },
 } satisfies Record<string, Photo>;
 
 export type PhotoKey = keyof typeof PHOTOS;
@@ -210,7 +246,10 @@ export type PhotoKey = keyof typeof PHOTOS;
 export interface Film {
   src: string;
   poster: string;
+  /** Accessible name for the video (not shown). */
   caption: Record<Locale, string>;
+  /** Optional small tag shown on the video (e.g. "Result"). */
+  tag?: Record<Locale, string>;
 }
 
 /** Short muted loops (encoded 576×1024 H.264, ≈1 MB each), served from /public/media. */
@@ -239,5 +278,17 @@ export const FILMS = {
     src: '/media/yacht-on-horizon.mp4',
     poster: '/media/yacht-on-horizon-poster.webp',
     caption: { en: 'On the horizon', me: 'Na horizontu' },
+  },
+  polishing: {
+    src: '/media/yacht-polishing-in-progress.mp4',
+    poster: '/media/yacht-polishing-in-progress-poster.webp',
+    caption: { en: 'Machine polishing a yacht hull on the hard stand', me: 'Mašinsko poliranje trupa jahte na suhom vezu' },
+    tag: { en: 'Polishing in progress', me: 'Poliranje u toku' },
+  },
+  polishingResult: {
+    src: '/media/yacht-polishing-result.mp4',
+    poster: '/media/yacht-polishing-result-poster.webp',
+    caption: { en: 'Polished yacht hull with a deep, glossy finish reflecting the sun', me: 'Ispoliran trup jahte sa dubokim sjajem u kojem se odbija sunce' },
+    tag: { en: 'Result', me: 'Rezultat' },
   },
 } satisfies Record<string, Film>;

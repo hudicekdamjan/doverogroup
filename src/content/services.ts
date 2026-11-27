@@ -26,6 +26,13 @@ export interface ServiceContent {
   highlight: L<{ heading: string; text: string }>;
   faq: L<{ q: string; a: string }[]>;
   related: ServiceKey[];
+  /** Optional real job shown step by step (photo + short tag, no captions). */
+  caseStudy?: {
+    label: L;
+    heading: L;
+    text: L;
+    steps: { photo: PhotoKey; tag: L }[];
+  };
 }
 
 export const SERVICES: Record<ServiceKey, ServiceContent> = {
@@ -203,7 +210,7 @@ export const SERVICES: Record<ServiceKey, ServiceContent> = {
           { title: 'Cracks & stress cracks', text: 'Hairline and stress cracks opened, repaired and sealed so they do not return.' },
           { title: 'Fiberglass damage', text: 'Damaged fiberglass areas rebuilt before the finishing layers are applied.' },
           { title: 'Colour matching', text: 'Gelcoat tinted to match the existing surface, including hulls that have aged in the sun.' },
-          { title: 'Finishing & polishing', text: 'Wet sanding and polishing so the repaired area follows the gloss of the hull around it.' },
+          { title: 'Lacquering & finishing', text: 'Painted hulls are lacquered, then wet sanded and polished so the repaired area follows the gloss of the hull around it.' },
         ],
       },
       me: {
@@ -214,7 +221,7 @@ export const SERVICES: Record<ServiceKey, ServiceContent> = {
           { title: 'Pukotine', text: 'Sitne i naponske pukotine otvorene, sanirane i zatvorene kako se ne bi vraćale.' },
           { title: 'Oštećenja fiberglasa', text: 'Oštećeni djelovi fiberglasa obnovljeni prije nanošenja završnih slojeva.' },
           { title: 'Usklađivanje boje', text: 'Gelcoat toniran prema postojećoj površini, uključujući trupove koje je sunce već izbijelilo.' },
-          { title: 'Završna obrada i poliranje', text: 'Mokro brušenje i poliranje kako bi popravljeni dio pratio sjaj ostatka trupa.' },
+          { title: 'Lakiranje i završna obrada', text: 'Lakirani trupovi se ponovo lakiraju, a zatim mokro bruse i poliraju kako bi popravljeni dio pratio sjaj ostatka trupa.' },
         ],
       },
     },
@@ -260,6 +267,19 @@ export const SERVICES: Record<ServiceKey, ServiceContent> = {
         { q: 'Mogu li sitna oštećenja da sačekaju kraj sezone?', a: 'Površinske ogrebotine često mogu. Oštećenja i pukotine koje otvaraju laminat ispod gelcoata bolje je sanirati odmah, prije nego što vlaga prodre.' },
         { q: 'Da li jahta mora van vode?', a: 'Popravke iznad vodene linije često se mogu raditi na vezu, zavisno od marine. Oštećenja na vodenoj liniji ili ispod nje obično zahtijevaju da jahta bude van vode.' },
         { q: 'Može li se popravka spojiti sa poliranjem?', a: 'Može. Mnogi vlasnici kombinuju popravku sa kompletnim poliranjem, kako bi cijeli trup bio ujednačeno završen.' },
+      ],
+    },
+    caseStudy: {
+      label: { en: 'Case study', me: 'Primjer iz prakse' },
+      heading: { en: 'From damage to a new finish', me: 'Od oštećenja do novog sjaja' },
+      text: {
+        en: 'Gelcoat repair and lacquering on a grey hull: the damaged edge is filled and faired, the hull is masked off and lacquered, and the side is finished to an even gloss.',
+        me: 'Popravka gelcoata i lakiranje na sivom trupu: oštećena ivica se kituje i izravnava, trup se oblijepi i lakira, a bok završi do ujednačenog sjaja.',
+      },
+      steps: [
+        { photo: 'gelcoatBefore', tag: { en: 'Before', me: 'Prije' } },
+        { photo: 'gelcoatDuring', tag: { en: 'Repair & lacquering', me: 'Popravka i lakiranje' } },
+        { photo: 'gelcoatAfter', tag: { en: 'After', me: 'Poslije' } },
       ],
     },
     related: ['detailing', 'maintenance', 'storage'],
